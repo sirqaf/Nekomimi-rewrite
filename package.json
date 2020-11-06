@@ -1,0 +1,30 @@
+{
+  "//1": "My Precious Nekomimi",
+  "name": "nekomimi",
+  "version": "0.0.1-beta",
+  "description": "nyaa~",
+  "main": "neko.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node neko.js"
+  },
+  "dependencies": {
+    "discord.js": "^12.4.0",
+    "enmap": "^5.7.3",
+    "@discordjs/opus": "^0.3.2",
+    "ffmpeg-static": "^4.2.7",
+    "discord-player": "^3.0.2"
+  },
+  "engines": {
+    "node": "12.x"
+  },
+  "repository": {
+    "url": "https://github.com/sirqaf/Nekomimi"
+  },
+  "license": "MIT",
+  "keywords": [],
+  "devDependencies": {
+    "eslint": "^7.7.0"
+  },
+  "author": "sirqaf"
+}
