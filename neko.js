@@ -3,7 +3,7 @@ if (Number(process.version.slice(1).split(".")[0]) < 12)
     "Node 12.0.0 or higher is required. Update Node on your system."
   );
 
-  // load modules
+// load modules
 const Discord = require("discord.js");
 const { promisify } = require("util");
 const readdir = promisify(require("fs").readdir);
@@ -30,36 +30,37 @@ client.aliases = new Enmap();
 client.settings = new Enmap({ name: "settings" });
 
 // initialize music player
-const { Player } = require("discord-player")
-const player = new Player(client, { 
-  leaveOnEmpty: true, 
-  leaveOnEnd:   true, 
-  leaveOnStop:  true 
+const { Player } = require("discord-player");
+const player = new Player(client, {
+  leaveOnEmpty: true,
+  leaveOnEnd: true,
+  leaveOnStop: true,
 });
 client.player = player;
 
 const init = async () => {
-  
   // commands handler
-const cmdDirs = [
-  "./commands/anime",
-  "./commands/fun",
-  "./commands/games",
-  "./commands/images",
-  "./commands/moderation",
-  "./commands/music",
-  "./commands/utility"
-];
-const cmdFiles = await readdir(dir);
-client.logger.log(`Total Commands: ${cmdFiles.length}`);
-    
-    cmdFiles.forEach(f => {
+  const cmdDirs = [
+    "./commands/anime",
+    "./commands/fun",
+    "./commands/games",
+    "./commands/images",
+    "./commands/moderation",
+    "./commands/music",
+    "./commands/utility",
+  ];
+
+  cmdDirs.forEach(async (dir) => {
+    const cmdFiles = await readdir(dir);
+    client.logger.log(`Total Commands: ${cmdFiles.length}`);
+    cmdFiles.forEach((f) => {
       if (!f.endsWith(".js")) return;
       const response = client.loadCommand(f, dir);
       if (response) client.logger.log(response);
     });
+  });
 
-    // events handler
+  // events handler
   const evtFiles = await readdir("./events/");
   client.logger.log(`Total Events: ${evtFiles.length}`);
   evtFiles.forEach((file) => {

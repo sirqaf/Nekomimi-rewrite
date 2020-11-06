@@ -10,13 +10,13 @@
   },
   "dependencies": {
     "discord.js": "^12.4.0",
-    "enmap": "^5.7.3",
+    "enmap": "^5.8.0",
     "@discordjs/opus": "^0.3.2",
     "ffmpeg-static": "^4.2.7",
     "discord-player": "^3.0.2"
   },
   "engines": {
-    "node": "12.x"
+    "node": ">=12"
   },
   "repository": {
     "url": "https://github.com/sirqaf/Nekomimi"

@@ -2,12 +2,11 @@
 module.exports = (client, member) => {
   const settings = client.getSettings(member.guild);
   if (settings.welcomeEnabled !== "true") return;
-  // replace placeholder with data
-  const welcomeMessage = settings.welcomeMessage.replace(
-    "{{user}}",
-    member.user.tag
-  );
-  // send welcome message
+
+  const welcomeMessage = settings.welcomeMessage
+    .replace("{{user}}", member.user.tag)
+    .replace("{{guild}}", member.guild.name);
+
   member.guild.channels.cache
     .find((c) => c.name === settings.welcomeChannel)
     .send(welcomeMessage)

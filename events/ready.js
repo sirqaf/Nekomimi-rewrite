@@ -1,10 +1,10 @@
-// bot log
+// bot online log
 module.exports = async (client) => {
   client.logger.log(
-    `${client.user.tag}, ready to serve ${client.users.cache.size} users in ${client.guilds.cache.size} servers.`,
-    "ready"
+    `Logged in as ${client.user.tag} | ${client.users.cache.size} users | ${client.guilds.cache.size} servers`
   );
-  client.user.setActivity(`${client.settings.get("default").prefix}help`, {
-    type: "PLAYING",
-  });
+  client.user.setActivity("with sirqaf", { type: "PLAYING" });
+
+  let targetChannel = client.channels.cache.get(process.env.MODLOG_CHANNEL_ID);
+  targetChannel.send("Onii chan im online");
 };

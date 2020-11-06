@@ -15,7 +15,7 @@ const config = {
       "adminRole": "Administrator",
       "systemNotice": "true", // perm-low notice
       "welcomeChannel": "welcome",
-      "welcomeMessage": "Moshi moshi, welcome {{user}} to my ",
+      "welcomeMessage": "Moshi moshi, welcome {{user}} to my {{guild}}",
       "welcomeEnabled": "true"
     },
   
