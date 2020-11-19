@@ -1,146 +1,89 @@
 const Discord = require("discord.js");
+const YouTubeAPI = require("simple-youtube-api");
+const youtube = new YouTubeAPI(process.env.YOUTUBE_API_KEY);
 
 exports.run = async (client, message, args) => {
-  const isPlaying = client.player.isPlaying(message.guild.id);
-
-  // Check whether args has song name
-  const name = args.join(" ");
-  if (!name) {
-    return message.channel.send("Onii chan you must input song name");
-  }
-
-  // Check whether user in voice channel or not
-  const voice = message.member.voice.channel;
-  if (!voice) {
-    return message.channel.send("Onii chan you are not in a voice channel");
-  }
-
-  let trackToPlay;
-  let isPlaylist;
-
-  // Check my permissions
-  const perms = voice.permissionsFor(client.user);
-  if (!perms.has("CONNECT") || !perms.has("SPEAK")) {
+  if (!args.length) {
     return message.channel.send(
-      "Onii chan you do not have SPEAK/CONNECT permission, use me on another voice channel"
+      `Onii chan you must input song name/url, please refer ${message.settings.prefix}help play for details`
     );
   }
-
-  // Find song
-  const tracks = await client.player
-    .searchTracks(args.join(" "), true)
-    .catch(() => {});
-  if (!tracks || !tracks[0]) {
-    return message.channel.send("Onii chan i cant find that song");
-  } else if (tracks[0].fromPlaylist) {
-    trackToPlay = args.join(" ");
-    isPlaylist = true;
-  } else if (
-    args
-      .join(" ")
-      .match(
-        /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/
-      )
-  ) {
-    trackToPlay = tracks[0];
-  } else {
-    // Song has been found
-    try {
-      if (tracks.length > 9) tracks.splice(9);
-      let i = 0;
-      // Song menu
-      const embed = new Discord.MessageEmbed()
-        .setDescription(tracks.map(t => `**${++i}** - ${t.name}`).join("\n"))
-        .setColor("#7EB9FF");
-      message.channel.send(embed);
-      // Wait for answer
-      await message.channel
-        .awaitMessages(m => m.content > 0 && m.content <= 9, {
-          max: 1,
-          time: 20000,
-          errors: ["time"]
-        })
-        .then(async answers => {
-          const index = parseInt(answers.first().content, 9);
-          trackToPlay = tracks[index - 1];
-        })
-        .catch(err => {
-          console.log(err);
-          message.channel.send("Onii chan time is up");
-          return;
-        });
-    } catch (err) {
-      console.log(err);
-      return message.channel.send("Onii chan i cant find that song");
-    }
+  if (message.channel.activeCollector) {
+    return message.channel.send(
+      "Onii chan a message collector is already active in this channel."
+    );
   }
-  // Delete song menu
-  message.channel.bulkDelete(2);
-  if (trackToPlay) {
-    if (isPlaying) {
-      const result = await client.player.addToQueue(
-        message.guild.id,
-        trackToPlay,
-        message.author
+  if (!message.member.voice.channel) {
+    return message.channel.send("Onii chan you are not in a voice channel");
+  }
+  const search = args.join(" ");
+
+  try {
+    const results = await youtube.searchVideos(search, 9);
+
+    let resultsEmbed = new Discord.MessageEmbed()
+      .setColor("#7EB9FF")
+      .setFooter("type 'cancel' to exit")
+      .setDescription(
+        results
+          .map((video, index) => `**${index + 1}.** ${video.title}`)
+          .join("\n")
       );
-      if (isPlaylist) {
-        message.channel.send("Added to queue", {
-          songCount: result.tracks.length
-        });
-      } else {
-        message.channel.send("Added to queue", {
-          songName: trackToPlay.name
-        });
+    var resultsMessage = await message.channel.send(resultsEmbed);
+
+    function filter(msg) {
+      const pattern = /^[0-9]{1,2}(\s*,\s*[0-9]{1,2})*$/g;
+      return (
+        pattern.test(msg.content) ||
+        msg.content === "cancel" ||
+        msg.content === "Cancel"
+      );
+    }
+
+    message.channel.activeCollector = true;
+    const response = await message.channel.awaitMessages(filter, {
+      max: 1,
+      time: 20000,
+      errors: ["time"]
+    });
+
+    if (
+      response.first().content === "cancel" ||
+      response.first().content === "Cancel"
+    ) {
+      resultsMessage.delete();
+      return (message.channel.activeCollector = false);
+    }
+
+    const reply = response.first().content;
+    if (reply.includes(",")) {
+      // multiple choice
+      let songs = reply.split(",").map(str => str.trim());
+
+      for (let song of songs) {
+        const choice = parseInt(song, 10);
+        let track = results[choice - 1].url;
+        await message.client.commands
+          .get("playlink")
+          .run(client, message, [track]);
       }
     } else {
-      const result = await client.player.play(
-        voice,
-        trackToPlay,
-        message.author
-      );
-      if (isPlaylist) {
-        message.channel.send("Queue list", {
-          songCount: result.tracks.length
-        });
-      }
-      const queue = client.player.getQueue(message.guild.id);
-      const track = await client.player.nowPlaying(message.guild.id);
-
-      // Now playing embed
-      const nowPlayingEmbed = new Discord.MessageEmbed()
-        .setAuthor(
-          "Now Playing",
-          "https://cdn.glitch.com/ee8b7266-52ce-4183-a772-33c4a40a6915%2Fplay.png?v=1598773025944"
-        )
-        .setColor("#7EB9FF")
-        .setImage(track.thumbnail)
-        .addField("• Title", track.name)
-        .addField("• Duration", track.duration)
-        .setFooter(track.author.toLowerCase());
-      // Events
-      queue
-        .on("end", () => {
-          message.channel.send("Queue ended");
-        })
-        .on("trackChanged", (oldTrack, newTrack, skipped, repeatMode) => {
-          const newTrackEmbed = new Discord.MessageEmbed()
-            .setAuthor(
-              "Now Playing",
-              "https://cdn.glitch.com/ee8b7266-52ce-4183-a772-33c4a40a6915%2Fplay.png?v=1598773025944"
-            )
-            .setColor("#7EB9FF")
-            .setImage(newTrack.thumbnail)
-            .addField("• Title", newTrack.name)
-            .addField("• Duration", newTrack.duration)
-            .setFooter(newTrack.author.toLowerCase());
-
-          message.channel.send(newTrackEmbed);
-        });
-
-      message.channel.send(nowPlayingEmbed);
+      // single choice
+      const choice = parseInt(response.first().content, 10);
+      let track = results[choice - 1].url;
+      message.client.commands.get("playlink").run(client, message, [track]);
     }
-  } else {
-    return message.channel.send("Onii chan no results can be find");
+    message.channel.activeCollector = false;
+    resultsMessage.delete().catch(console.error);
+    response
+      .first()
+      .delete()
+      .catch(console.error);
+  } catch (error) {
+    console.error(error);
+    resultsMessage.delete();
+    message.channel.send("Onii chan time is up");
+    message.channel.activeCollector = false;
   }
 };
 
@@ -154,7 +97,7 @@ exports.conf = {
 exports.help = {
   name: "play",
   category: "Music",
-  description: "Play youtube song/url",
-  usage: "<prefix>play <name/url>",
+  description: "Search and play youtube song",
+  usage: "<prefix>play <name>",
   option: ""
 };

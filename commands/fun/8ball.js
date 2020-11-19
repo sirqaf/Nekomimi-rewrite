@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 
-exports.run = async (message, args) => {
+exports.run = async (client, message, args) => {
   const outcomes = [
     "Yes.", // Positive
     "No.", // Negative

@@ -16,11 +16,11 @@ function createDescription(animes) {
   return c;
 }
 
-exports.run = (message, args) => {
+exports.run = (client, message, args, level) => {
   animeTitle = args;
   mal
     .search("anime", animeTitle, 1)
-    .then((result) => {
+    .then(result => {
       let animes = result.results;
       let filterNumber = [];
       for (i = 0; i < animes.length && i < 10; i++) {
@@ -36,11 +36,11 @@ exports.run = (message, args) => {
           "Onii chan please choose the desired anime by sending the corresponding number",
           embedSelection
         )
-        .then((msg) => {
+        .then(msg => {
           let i;
           message.channel
             .awaitMessages(
-              (response) => {
+              response => {
                 for (i = 0; i < filterNumber.length; i++) {
                   if (response.content === filterNumber[i]) {
                     response.delete();
@@ -49,21 +49,21 @@ exports.run = (message, args) => {
                 }
               },
               {
-                max: 1,
+                max: 1
                 //set timer for deleting search result
                 //time: 10000,
                 //errors: ["time"]
               }
             )
-            .then((collected) => {
-              mal.findAnime(animes[i - 1].mal_id).then((result) => {
+            .then(collected => {
+              mal.findAnime(animes[i - 1].mal_id).then(result => {
                 console.log(result);
                 anime = result;
                 const embedAnime = new Discord.MessageEmbed()
                   .setColor("#7EB9FF")
                   .setTitle(anime.title)
                   .addField(
-                    "❯ Alternative Titles",
+                    "Alternative Titles",
                     `• **English:** ${
                       anime.title_english ? anime.title_english : anime.title
                     }\n• **Synonyms:** ${
@@ -82,7 +82,7 @@ exports.run = (message, args) => {
                   )
                   .addField("MAL external link:", anime.url)
                   .addField(
-                    "❯ Information",
+                    "Information",
                     `• **Type:** ${
                       anime.type ? anime.type : "`N/A`"
                     }\n• **Episodes:** ${
@@ -93,7 +93,7 @@ exports.run = (message, args) => {
                     true
                   )
                   .addField(
-                    "❯ Statistics",
+                    "Statistics",
                     `• **Score:** ${
                       anime.score ? anime.score : "`N/A`"
                     }\n• **Ranked:** #${
@@ -117,9 +117,9 @@ exports.run = (message, args) => {
             });*/
         });
     })
-    .catch((response) => {
+    .catch(response => {
       console.log(response);
-      message.channel.send("Onii chan im not functioning correctly");
+      message.channel.send("Onii chan anime command not functioning correctly");
     });
 };
 
@@ -127,7 +127,7 @@ exports.conf = {
   enabled: true,
   guildOnly: true,
   aliases: [],
-  permLevel: "User",
+  permLevel: "User"
 };
 
 exports.help = {
@@ -135,5 +135,5 @@ exports.help = {
   category: "Anime",
   description: "Search for anime",
   usage: "<prefix>anime <animename>",
-  option: "",
+  option: ""
 };

@@ -1,5 +1,5 @@
 // Does not rebooting server, only bot
-exports.run = async (client, message) => {
+exports.run = async (client, message, args, level) => {
   await message.channel.send(
     "Onii chan im restarting..\n(approximately 15 seconds)"
   );
@@ -11,6 +11,7 @@ exports.conf = {
   enabled: true,
   guildOnly: false,
   aliases: [],
+  cooldown: 30,
   permLevel: "Bot Admin",
 };
 
