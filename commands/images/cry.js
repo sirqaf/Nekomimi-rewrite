@@ -1,7 +1,8 @@
 const fetch = require("node-fetch");
 
 exports.run = async (client, message) => {
-  fetch("https://nekos.life/api/v2/img/wallpaper")
+
+  fetch("https://waifu.pics/api/sfw/cry")
     .then((response) => {
       if (!response.ok)
         return message.channel.send("Onii chan an API error has occurred");
@@ -10,12 +11,9 @@ exports.run = async (client, message) => {
     .then((data) => {
       const image = data.url;
 
-      message.channel.send(
-        `${message.member.user.username} has discovered a new wallpaper`,
-        {
-          files: [image],
-        }
-      );
+      message.channel.send(`${message.member.user.username} is crying`, {
+        files: [image],
+      });
       console.log(data);
     })
     .catch((err) => {
@@ -26,14 +24,14 @@ exports.run = async (client, message) => {
 exports.conf = {
   enabled: true,
   guildOnly: true,
-  aliases: ["aw"],
-  permLevel: "User",
+  aliases: [],
+  permLevel: "User"
 };
 
 exports.help = {
-  name: "animewallpaper",
+  name: "cry",
   category: "Images",
-  description: "Random anime wallpaper",
-  usage: "<prefix>animewallpaper",
-  option: "",
+  description: "Random anime crying gif",
+  usage: "<prefix>cry",
+  option: ""
 };

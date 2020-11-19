@@ -1,7 +1,14 @@
 const fetch = require("node-fetch");
 
 exports.run = async (client, message) => {
-  fetch("https://nekos.life/api/v2/img/wallpaper")
+
+  var url = [
+    "https://waifu.pics/api/sfw/smug",
+    "https://nekos.life/api/v2/img/smug",
+  ];
+  var randomUrl = url[Math.floor(Math.random() * url.length)];
+
+  fetch(randomUrl)
     .then((response) => {
       if (!response.ok)
         return message.channel.send("Onii chan an API error has occurred");
@@ -10,12 +17,9 @@ exports.run = async (client, message) => {
     .then((data) => {
       const image = data.url;
 
-      message.channel.send(
-        `${message.member.user.username} has discovered a new wallpaper`,
-        {
-          files: [image],
-        }
-      );
+      message.channel.send(`${message.member.user.username} was feeling smug without any particular reason`, {
+        files: [image],
+      });
       console.log(data);
     })
     .catch((err) => {
@@ -26,14 +30,14 @@ exports.run = async (client, message) => {
 exports.conf = {
   enabled: true,
   guildOnly: true,
-  aliases: ["aw"],
-  permLevel: "User",
+  aliases: [],
+  permLevel: "User"
 };
 
 exports.help = {
-  name: "animewallpaper",
+  name: "smug",
   category: "Images",
-  description: "Random anime wallpaper",
-  usage: "<prefix>animewallpaper",
-  option: "",
+  description: "Random anime smug gif",
+  usage: "<prefix>smug",
+  option: ""
 };
