@@ -1,11 +1,8 @@
+const Discord = require("discord.js");
+
 module.exports = async (client, message) => {
   if (message.author.bot) return;
   const settings = (message.settings = client.getSettings(message.guild));
-  // bot mention
-  // const prefixMention = new RegExp(`^<@!?${client.user.id}>( |)$`);
-  // if (message.content.match(prefixMention)) {
-  //   return message.reply(`My prefix on this guild is \`${settings.prefix}\``);
-  // }
 
   if (message.content.indexOf(settings.prefix) !== 0) return;
   const args = message.content
@@ -25,12 +22,36 @@ module.exports = async (client, message) => {
       "Onii chan this command is unavailable in dm, please use in a guild"
     );
 
+  // commands cooldown
+  const cooldowns = client.cooldowns;
+  if (!cooldowns.has(cmd)) {
+    cooldowns.set(cmd, new Discord.Collection());
+  }
+
+  const now = Date.now();
+  const timestamps = cooldowns.get(cmd);
+  const cooldownAmount = (cmd.conf.cooldown || 2) * 1000;
+
+  if (timestamps.has(message.author.id)) {
+    const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
+
+    if (now < expirationTime) {
+      const timeLeft = (expirationTime - now) / 1000;
+      return message.reply(
+        `please wait ${timeLeft.toFixed(1)}s before reusing the command.`
+      );
+    }
+  }
+  timestamps.set(message.author.id, now);
+  setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+
+  // permission notice
   if (level < client.levelCache[cmd.conf.permLevel]) {
     if (settings.systemNotice === "true") {
       return message.channel
         .send(`Onii chan you do not have permission to use this command.
     Your permission level is ${level} (${
-        client.config.permLevels.find((l) => l.level === level).name
+        client.config.permLevels.find(l => l.level === level).name
       })
     This command requires level ${client.levelCache[cmd.conf.permLevel]} (${
         cmd.conf.permLevel
@@ -46,7 +67,7 @@ module.exports = async (client, message) => {
     message.flags.push(args.shift().slice(1));
   }
   client.logger.cmd(
-    `[CMD] ${client.config.permLevels.find((l) => l.level === level).name} ${
+    `[CMD] ${client.config.permLevels.find(l => l.level === level).name} ${
       message.author.username
     } (${message.author.id}) ran command ${cmd.help.name}`
   );

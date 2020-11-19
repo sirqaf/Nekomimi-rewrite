@@ -18,24 +18,16 @@ module.exports = (client) => {
     return permlvl;
   };
 
-  // default setings function
-  const defaultSettings = {
-    prefix: "-",
-    modLogChannel: "log",
-    modRole: "Moderator",
-    adminRole: "Administrator",
-    systemNotice: "true",
-    welcomeChannel: "welcome",
-    welcomeMessage:
-      "Say hello to {{user}}, everyone! We all need a warm welcome sometimes :D",
-    welcomeEnabled: "true",
-  };
-
-  client.getSettings = (guild) => {
-    client.settings.ensure("default", defaultSettings);
-    if (!guild) return client.settings.get("default");
-    const guildConf = client.settings.get(guild.id) || {};
-    return { ...client.settings.get("default"), ...guildConf };
+  // retrieve settings from database
+  client.getSettings = guild => {
+    const defaults = client.config.defaultSettings || {};
+    if (!guild) return defaults;
+    const guildData = client.settings.get(guild) || {};
+    const returnObject = {};
+    Object.keys(defaults).forEach(key => {
+      returnObject[key] = guildData[key] ? guildData[key] : defaults[key];
+    });
+    return returnObject;
   };
 
   // single line await message function
@@ -72,10 +64,10 @@ module.exports = (client) => {
   };
 
   // command function
-  client.loadCommand = (commandName) => {
+  client.loadCommand = (commandName, dir) => {
     try {
       client.logger.log(`Loading Command: ${commandName}`);
-      const props = require(`../commands/${commandName}`);
+      const props = require(`../${dir}/${commandName}`);
       if (props.init) {
         props.init(client);
       }
