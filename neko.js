@@ -67,62 +67,6 @@ const init = async () => {
     const thisLevel = client.config.permLevels[i];
     client.levelCache[thisLevel.name] = thisLevel.level;
   }
-  // Initialize Chat bot
-  const dialogflow = require("dialogflow");
-  const dialogflowClient = new dialogflow.SessionsClient();
-  //const mention = `<@${client.user.id}>`;
-  // Define session path
-  const sessionPath = dialogflowClient.sessionPath(
-    process.env.DIALOGFLOW_PROJECT_ID,
-    "discordbot"
-  );
-  client.on("message", m => {
-    // Say back what user said
-    if (!shouldBeInvoked(m)) {
-      return;
-    }
-    const message = remove(client.user.username, m.cleanContent);
-
-    if (sayBack(m)) {
-      m.channel.send(m.content.replace("@neko say", ""));
-      return;
-    }
-    const dialogflowRequest = {
-      session: sessionPath,
-      queryInput: {
-        text: {
-          text: message,
-          languageCode: "en-US"
-        }
-      }
-    };
-
-    dialogflowClient.detectIntent(dialogflowRequest).then(responses => {
-      m.channel.send(responses[0].queryResult.fulfillmentText);
-    });
-  });
-
-  function shouldBeInvoked(message) {
-    return (
-      (message.content.startsWith(`@${client.user.tag}`) ||
-        message.content.startsWith("@" + client.user.username) ||
-        message.channel.type === "dm") &&
-      client.user.id !== message.author.id
-    );
-  }
-
-  function sayBack(message) {
-    return (
-      message.content.startsWith(`@${client.user.tag}` + " say") &&
-      client.user.id !== message.author.id
-    );
-  }
-
-  function remove(username, text) {
-    return text
-      .replace("@" + username + " ", "")
-      .replace(`@${client.user.tag}` + " ", "");
-  }
 
   // bot login
   client.login(process.env.DISCORD_TOKEN);
