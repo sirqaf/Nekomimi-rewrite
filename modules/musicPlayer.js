@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
-const ytdlDiscord = require("ytdl-core-discord");
-const scdl = require("soundcloud-downloader");
+const ytdl = require("erit-ytdl");
+const scdl = require("soundcloud-downloader").default;
 const { canModifyQueue } = require("../modules/musicModifyQueue");
 
 module.exports = {
@@ -11,7 +11,7 @@ module.exports = {
     if (!song) {
       queue.channel.leave();
       message.client.queue.delete(message.guild.id);
-      return queue.textChannel.send("queue ended").catch(console.error);
+      return queue.textChannel.send("queue ended");
     }
 
     let stream = null;
@@ -19,7 +19,7 @@ module.exports = {
 
     try {
       if (song.url.includes("youtube.com")) {
-        stream = await ytdlDiscord(song.url, { highWaterMark: 1 << 25 });
+        stream = await ytdl(song.url, { highWaterMark: 1 << 25 });
       } else if (song.url.includes("soundcloud.com")) {
         try {
           stream = await scdl.downloadFormat(
@@ -117,77 +117,65 @@ module.exports = {
       switch (reaction.emoji.name) {
         case "⏭️":
           queue.playing = true;
-          reaction.users.remove(user).catch(console.error);
+          reaction.users.remove(user);
           if (!canModifyQueue(member)) return;
           queue.connection.dispatcher.end();
           const skipEmbed = new Discord.MessageEmbed()
-            .setAuthor(
-              "Skip",
-              "https://cdn.glitch.com/ee8b7266-52ce-4183-a772-33c4a40a6915%2Fnext.png?v=1598773026526"
-            )
+            .setAuthor("Skip", "https://i.imgur.com/dqPRC1O.png")
             .setColor("#7EB9FF")
             .setDescription(`${song.title}`)
             .setThumbnail(
               `https://img.youtube.com/vi/${song.id}/maxresdefault.jpg`
             )
             .setFooter(`user: ${user.username}`);
-          queue.textChannel.send(skipEmbed).catch(console.error);
+          queue.textChannel.send(skipEmbed);
           collector.stop();
           break;
 
         case "⏯️":
-          reaction.users.remove(user).catch(console.error);
+          reaction.users.remove(user);
           if (!canModifyQueue(member)) return;
           if (queue.playing) {
             queue.playing = !queue.playing;
             queue.connection.dispatcher.pause(true);
             const pauseEmbed = new Discord.MessageEmbed()
-              .setAuthor(
-                "Pause",
-                "https://cdn.glitch.com/ee8b7266-52ce-4183-a772-33c4a40a6915%2Fpause.png?v=1598773026714"
-              )
+              .setAuthor("Pause", "https://i.imgur.com/IWXMVFi.png")
               .setColor("#7EB9FF")
               .setDescription(`${song.title}`)
               .setThumbnail(
                 `https://img.youtube.com/vi/${song.id}/maxresdefault.jpg`
               )
               .setFooter(`user: ${user.username}`);
-            queue.textChannel.send(pauseEmbed).catch(console.error);
+            queue.textChannel.send(pauseEmbed);
           } else {
             queue.playing = !queue.playing;
             queue.connection.dispatcher.resume();
             const resumeEmbed = new Discord.MessageEmbed()
-              .setAuthor(
-                "Resume",
-                "https://cdn.glitch.com/ee8b7266-52ce-4183-a772-33c4a40a6915%2Fplay.png?v=1598773025944"
-              )
+              .setAuthor("Resume", "https://i.imgur.com/m09HHoC.png")
               .setColor("#7EB9FF")
               .setDescription(`${song.title}`)
               .setThumbnail(
                 `https://img.youtube.com/vi/${song.id}/maxresdefault.jpg`
               )
               .setFooter(`user: ${user.username}`);
-            queue.textChannel.send(resumeEmbed).catch(console.error);
+            queue.textChannel.send(resumeEmbed);
           }
           break;
 
         case "🔁":
-          reaction.users.remove(user).catch(console.error);
+          reaction.users.remove(user);
           if (!canModifyQueue(member)) return;
           queue.loop = !queue.loop;
           const loopEmbed = new Discord.MessageEmbed()
-            .setAuthor(
-              "Loop",
-              "https://cdn.glitch.com/ee8b7266-52ce-4183-a772-33c4a40a6915%2Frepeat.png?v=1598773026233"
-            )
+            .setAuthor("Loop", "https://i.imgur.com/hT5tIut.png")
             .setDescription(`set to [ ${queue.loop ? "**on**" : "**off**"} ]`)
             .setColor("#7EB9FF")
             .setFooter(`user: ${user.username}`);
-          queue.textChannel.send(loopEmbed).catch(console.error);
+          queue.textChannel.send(loopEmbed);
           break;
 
         case "🔀":
-          reaction.users.remove(user).catch(console.error);
+          reaction.users.remove(user);
           if (!canModifyQueue(message.member)) return;
           let songs = queue.songs;
           for (let i = songs.length - 1; i > 1; i--) {
@@ -197,32 +185,26 @@ module.exports = {
           queue.songs = songs;
           message.client.queue.set(message.guild.id, queue);
           const shuffleEmbed = new Discord.MessageEmbed()
-            .setAuthor(
-              "Shuffle",
-              "https://cdn.glitch.com/ee8b7266-52ce-4183-a772-33c4a40a6915%2Fshuffle.png?v=1598773024469"
-            )
+            .setAuthor("Shuffle", "https://i.imgur.com/yGmONoF.png")
             .setDescription("queue has been shuffled")
             .setColor("#7EB9FF")
             .setFooter(`user: ${user.username}`);
-          queue.textChannel.send(shuffleEmbed).catch(console.error);
+          queue.textChannel.send(shuffleEmbed);
           break;
 
         case "⏹️":
-          reaction.users.remove(user).catch(console.error);
+          reaction.users.remove(user);
           if (!canModifyQueue(member)) return;
           queue.songs = [];
           const stopEmbed = new Discord.MessageEmbed()
-            .setAuthor(
-              "Stop",
-              "https://cdn.glitch.com/ee8b7266-52ce-4183-a772-33c4a40a6915%2Fstop.png?v=1598773024116"
-            )
+            .setAuthor("Stop", "https://i.imgur.com/2glTzD1.png")
             .setColor("#7EB9FF")
             .setDescription(`${song.title}`)
             .setThumbnail(
               `https://img.youtube.com/vi/${song.id}/maxresdefault.jpg`
             )
             .setFooter(`user: ${user.username}`);
-          queue.textChannel.send(stopEmbed).catch(console.error);
+          queue.textChannel.send(stopEmbed);
           try {
             queue.connection.dispatcher.end();
           } catch (error) {
@@ -233,21 +215,21 @@ module.exports = {
           break;
 
         // case "🔇":
-        //   reaction.users.remove(user).catch(console.error);
+        //   reaction.users.remove(user)
         //   if (!canModifyQueue(member)) return;
         //   if (queue.volume <= 0) {
         //     queue.volume = 100;
         //     queue.connection.dispatcher.setVolumeLogarithmic(100 / 100);
-        //     queue.textChannel.send(`${user} 🔊 unmuted the music!`).catch(console.error);
+        //     queue.textChannel.send(`${user} 🔊 unmuted the music!`)
         //   } else {
         //     queue.volume = 0;
         //     queue.connection.dispatcher.setVolumeLogarithmic(0);
-        //     queue.textChannel.send(`${user} 🔇 muted the music!`).catch(console.error);
+        //     queue.textChannel.send(`${user} 🔇 muted the music!`)
         //   }
         //   break;
 
         case "🔉":
-          reaction.users.remove(user).catch(console.error);
+          reaction.users.remove(user);
           if (!canModifyQueue(member)) return;
           if (queue.volume - 10 <= 0) {
             queue.volume = 0;
@@ -256,18 +238,15 @@ module.exports = {
           queue.connection.dispatcher.setVolumeLogarithmic(queue.volume / 100);
 
           const volumedownEmbed = new Discord.MessageEmbed()
-            .setAuthor(
-              "Volume",
-              "https://cdn.glitch.com/ee8b7266-52ce-4183-a772-33c4a40a6915%2Fmedium-volume.png?v=1598815964050"
-            )
+            .setAuthor("Volume", "https://i.imgur.com/KK6ZEaF.png")
             .setDescription(`set to [ **${queue.volume}** ]`)
             .setColor("#7EB9FF")
             .setFooter(`user: ${user.username}`);
-          queue.textChannel.send(volumedownEmbed).catch(console.error);
+          queue.textChannel.send(volumedownEmbed);
           break;
 
         case "🔊":
-          reaction.users.remove(user).catch(console.error);
+          reaction.users.remove(user);
           if (!canModifyQueue(member)) return;
           if (queue.volume + 10 > 100) {
             queue.volume = 100;
@@ -276,26 +255,23 @@ module.exports = {
           queue.connection.dispatcher.setVolumeLogarithmic(queue.volume / 100);
 
           const volumeupEmbed = new Discord.MessageEmbed()
-            .setAuthor(
-              "Volume",
-              "https://cdn.glitch.com/ee8b7266-52ce-4183-a772-33c4a40a6915%2Fmedium-volume.png?v=1598815964050"
-            )
+            .setAuthor("Volume", "https://i.imgur.com/KK6ZEaF.png")
             .setDescription(`set to [ **${queue.volume}** ]`)
             .setColor("#7EB9FF")
             .setFooter(`user: ${user.username}`);
-          queue.textChannel.send(volumeupEmbed).catch(console.error);
+          queue.textChannel.send(volumeupEmbed);
           break;
 
         default:
-          reaction.users.remove(user).catch(console.error);
+          reaction.users.remove(user);
           break;
       }
     });
 
     collector.on("end", () => {
-      playingMessage.reactions.removeAll().catch(console.error);
+      playingMessage.reactions.removeAll();
       if (playingMessage && !playingMessage.deleted) {
-        playingMessage.delete({ timeout: 3000 }).catch(console.error);
+        playingMessage.delete({ timeout: 3000 });
       }
     });
   }

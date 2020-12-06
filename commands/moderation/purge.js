@@ -4,6 +4,18 @@ exports.run = async (client, message, args, level) => {
     return message.reply(
       "Onii chan please provide a number between 2 and 150 for the number of messages to delete"
     );
+  // await message.channel.messages
+  //   .fetch({
+  //     limit: 2
+  //   })
+  //   .then(messages => {
+  //     messages = messages
+  //       .filter(m => m.author.id === m.member.user.id)
+  //       .array();
+  //     message.channel
+  //       .bulkDelete(messages)
+  //       .catch(error => console.log(error.stack));
+  //   });
   const fetched = await message.channel.messages.fetch({
     limit: deleteCount
   });

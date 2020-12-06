@@ -5,7 +5,7 @@ const { YOUTUBE_API_KEY } = process.env.YOUTUBE_API_KEY;
 const { SOUNDCLOUD_CLIENT_ID } = process.env.SOUNDCLOUD_CLIENT_ID;
 const YouTubeAPI = require("simple-youtube-api");
 const youtube = new YouTubeAPI(process.env.YOUTUBE_API_KEY);
-const scdl = require("soundcloud-downloader");
+const scdl = require("soundcloud-downloader").default;
 const MAX_PLAYLIST_SIZE = 20;
 
 exports.run = async (client, message, args) => {
@@ -13,7 +13,7 @@ exports.run = async (client, message, args) => {
 
   if (!args.length) {
     return message.channel.send(
-      `Onii chan you must input song name/url, please refer ${process.env.PREFIX}help for guide`
+      `Onii chan you must input song name/url, please refer ${client.config.settings.prefix}help for guide`
     );
   }
   const voice = message.member.voice.channel;
@@ -59,9 +59,7 @@ exports.run = async (client, message, args) => {
       });
     } catch (error) {
       console.error(error);
-      return message
-        .reply("Onii chan i cannot found the playlist")
-        .catch(console.error);
+      return message.channel.send("Onii chan i cannot found the playlist");
     }
   } else if (scdl.isValidUrl(args[0])) {
     if (args[0].includes("/sets/")) {
@@ -84,9 +82,7 @@ exports.run = async (client, message, args) => {
       });
     } catch (error) {
       console.error(error);
-      return message.channel
-        .send("Onii chan the playlist cannot be found")
-        .catch(console.error);
+      return message.channel.send("Onii chan the playlist cannot be found");
     }
   }
 
@@ -129,9 +125,9 @@ exports.run = async (client, message, args) => {
       console.error(error);
       message.client.queue.delete(message.guild.id);
       await channel.leave();
-      return message.channel
-        .send(`Onii chan i could not join the channel: ${error}`)
-        .catch(console.error);
+      return message.channel.send(
+        `Onii chan i could not join the channel: ${error}`
+      );
     }
   }
 };

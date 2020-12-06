@@ -18,18 +18,6 @@ module.exports = (client) => {
     return permlvl;
   };
 
-  // retrieve settings from database
-  client.getSettings = guild => {
-    const defaults = client.config.defaultSettings || {};
-    if (!guild) return defaults;
-    const guildData = client.settings.get(guild) || {};
-    const returnObject = {};
-    Object.keys(defaults).forEach(key => {
-      returnObject[key] = guildData[key] ? guildData[key] : defaults[key];
-    });
-    return returnObject;
-  };
-
   // single line await message function
   client.awaitReply = async (msg, question, limit = 60000) => {
     const filter = (m) => m.author.id === msg.author.id;

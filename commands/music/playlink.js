@@ -3,14 +3,15 @@ const { SOUNDCLOUD_CLIENT_ID } = process.env.SOUNDCLOUD_CLIENT_ID;
 const ytdl = require("ytdl-core");
 const YouTubeAPI = require("simple-youtube-api");
 const youtube = new YouTubeAPI(process.env.YOUTUBE_API_KEY);
-const scdl = require("soundcloud-downloader");
+const scdl = require("soundcloud-downloader").default;
+const https = require("https");
 
 exports.run = async (client, message, args) => {
   const { channel } = message.member.voice;
 
   if (!args.length) {
     return message.channel.send(
-      `Onii chan you must input song name/url, please refer ${message.settings.prefix}help playlink for details`
+      `Onii chan you must input song name/url, please refer ${client.config.settings.prefix}help playlink for details`
     );
   }
   const voice = message.member.voice.channel;
@@ -34,14 +35,40 @@ exports.run = async (client, message, args) => {
   const videoPattern = /^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi;
   const playlistPattern = /^.*(list=)([^#\&\?]*).*/gi;
   const scRegex = /^https?:\/\/(soundcloud\.com)\/(.*)$/;
+  const mobileScRegex = /^https?:\/\/(soundcloud\.app\.goo\.gl)\/(.*)$/;
   const url = args[0];
   const urlValid = videoPattern.test(args[0]);
 
   // start the playlist if playlist url was provided
   if (!videoPattern.test(args[0]) && playlistPattern.test(args[0])) {
     return message.client.commands.get("playlist").run(client, message, args);
-  } else if (scdl.isValidUrl(url) && url.includes("/sets/")) {
+  } else if (url.includes("/sets/")) {
+    //scdl.isValidUrl(url) &&
     return message.client.commands.get("playlist").run(client, message, args);
+  }
+
+  // mobile soundcloud link
+  if (mobileScRegex.test(url)) {
+    try {
+      https.get(url, function(res) {
+        if (res.statusCode == "302") {
+          return message.client.commands
+            .get("play")
+            .run(client, message, [res.headers.location]);
+        } else {
+          return message.channel.send(
+            "Onii chan i could not find that Soundcloud track"
+          );
+        }
+      });
+    } catch (err) {
+      console.log(err);
+      return message.channel.send(
+        "Onii chan there was an error playing that Soundcloud track"
+      );
+
+      return message.channel.send("Following url redirection..");
+    }
   }
 
   const queueConstruct = {
@@ -67,9 +94,9 @@ exports.run = async (client, message, args) => {
         author: songInfo.videoDetails.author.name,
         duration: songInfo.videoDetails.lengthSeconds
       };
-    } catch (error) {
-      console.error(error);
-      return message.reply(error.message).catch(console.error);
+    } catch (err) {
+      console.log(err);
+      return message.channel.send("Onii chan there is an error occurred");
     }
   } else if (scRegex.test(url)) {
     try {
@@ -81,12 +108,13 @@ exports.run = async (client, message, args) => {
       };
     } catch (error) {
       if (error.statusCode === 404)
-        return message.channel
-          .send("Onii chan i could not find that Soundcloud track.")
-          .catch(console.error);
-      return message.channel
-        .send("Onii chan there was an error playing that Soundcloud track.")
-        .catch(console.error);
+        return message.channel.send(
+          "Onii chan i could not find that Soundcloud track"
+        );
+
+      return message.channel.send(
+        "Onii chan there was an error playing that Soundcloud track"
+      );
     }
   } else {
     try {
@@ -99,21 +127,19 @@ exports.run = async (client, message, args) => {
         author: songInfo.videoDetails.author.name,
         duration: songInfo.videoDetails.lengthSeconds
       };
-    } catch (error) {
-      console.error(error);
-      return message
-        .reply("Onii chan no video was found with a matching title")
-        .catch(console.error);
+    } catch (err) {
+      console.log(err);
+      return message.reply(
+        "Onii chan no video was found with a matching title"
+      );
     }
   }
 
   if (serverQueue) {
     serverQueue.songs.push(song);
-    return serverQueue.textChannel
-      .send(
-        `**${song.title}** has been added to the queue by ${message.author}`
-      )
-      .catch(console.error);
+    return serverQueue.textChannel.send(
+      `**${song.title}** has been added to the queue by ${message.author}`
+    );
   }
 
   queueConstruct.songs.push(song);
@@ -123,13 +149,13 @@ exports.run = async (client, message, args) => {
     queueConstruct.connection = await channel.join();
     await queueConstruct.connection.voice.setSelfDeaf(true);
     musicPlayer(queueConstruct.songs[0], message);
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    console.log(err);
     message.client.queue.delete(message.guild.id);
     await channel.leave();
-    return message.channel
-      .send(`Onii chan i could not join the channel: ${error}`)
-      .catch(console.error);
+    return message.channel.send(
+      `Onii chan i could not join the channel: ${err}`
+    );
   }
 };
 

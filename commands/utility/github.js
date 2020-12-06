@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const request = require("request");
 
-exports.run = async (client, message, args, level) => {
+exports.run = async (client, message, args) => {
   try {
     if (!args[0])
       return message.channel.send(
@@ -16,9 +16,9 @@ exports.run = async (client, message, args, level) => {
         headers: {
           Accept: "application/vnd.github.v3+json",
           Authorization: "token " + process.env.GITHUB_TOKEN,
-          "User-Agent": "Nekomimi",
+          "User-Agent": "Nekomimi"
         },
-        json: true,
+        json: true
       },
       async (req, res, json) => {
         let output = "";
@@ -28,7 +28,7 @@ exports.run = async (client, message, args, level) => {
           return message.channel.send("Onii chan i couldn't find any results!");
         if (json.items.length > 9) json.items.length = 9;
 
-        json.items.forEach((repo) => {
+        json.items.forEach(repo => {
           let title = repo.name;
           output += "\n" + i + " - " + title;
           i++;
@@ -53,9 +53,9 @@ exports.run = async (client, message, args, level) => {
             headers: {
               Accept: "application/vnd.github.v3+json",
               Authorization: "token " + process.env.GITHUB_TOKEN,
-              "User-Agent": "Nekomimi",
+              "User-Agent": "Nekomimi"
             },
-            json: true,
+            json: true
           },
           (req, res, json) => {
             const embed = new Discord.MessageEmbed()
@@ -78,7 +78,7 @@ exports.run = async (client, message, args, level) => {
                 json.open_issues_count || "no issues found",
                 true
               );
-            message.channel.send(embed).catch(console.error);
+            message.channel.send(embed);
           }
         );
       }
@@ -93,7 +93,7 @@ exports.conf = {
   enabled: true,
   guildOnly: true,
   aliases: [],
-  permLevel: "User",
+  permLevel: "User"
 };
 
 exports.help = {
@@ -101,5 +101,5 @@ exports.help = {
   category: "Utility",
   description: "Search GitHub repositories",
   usage: "<prefix>github <repositories>",
-  option: "",
+  option: ""
 };

@@ -1,14 +1,12 @@
 // new member join guilds
 module.exports = (client, member) => {
-  const settings = client.getSettings(member.guild);
-  if (settings.welcomeEnabled !== "true") return;
+  if (client.config.settings.welcomeEnabled !== "true") return;
 
-  const welcomeMessage = settings.welcomeMessage
+  const welcomeMessage = client.config.settings.welcomeMessage
     .replace("{{user}}", member.user.tag)
     .replace("{{guild}}", member.guild.name);
 
   member.guild.channels.cache
-    .find((c) => c.name === settings.welcomeChannel)
-    .send(welcomeMessage)
-    .catch(console.error);
+    .find(c => c.name === client.config.settings.welcomeChannel)
+    .send(welcomeMessage);
 };

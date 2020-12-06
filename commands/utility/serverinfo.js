@@ -27,6 +27,7 @@ exports.run = async (client, message, args, level) => {
       southafrica: ":flag_za:  South Africa"
     };
     const embed = new Discord.MessageEmbed()
+      .setAuthor("Server Information")
       .setThumbnail(message.guild.iconURL({ format: "png", size: 1024 }))
       .addField("• Name", message.guild.name, true)
       .addField("• ID", message.guild.id, true)

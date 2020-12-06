@@ -1,18 +1,26 @@
 const config = {
   // user role id
   ownerID: "378003303918862357",
-  admins: [],
+  admins: [
+    "575311311873769482",
+    "427761777015652354",
+    "744916692500480000",
+    "614839790835204126",
+    "778105551095332884",
+    "688918523896004623",
+    "768829430104719360"
+  ],
   support: [],
 
-  // default per-server settings
-  defaultSettings: {
+  // default bot settings
+  settings: {
     prefix: "/",
-    modLogChannel: "log",
+    modLogChannelId: "662911415451123712",
     modRole: "Moderator",
     adminRole: "Administrator",
     systemNotice: "true", // perm-low notice
-    welcomeChannel: "welcome",
-    welcomeMessage: "Moshi moshi, welcome {{user}} to my {{guild}}",
+    welcomeChannel: "uwu",
+    welcomeMessage: "Moshi moshi, welcome {{user}} to {{guild}}",
     welcomeEnabled: "true"
   },
 

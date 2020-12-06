@@ -8,6 +8,7 @@ exports.run = async (client, message, args) => {
   }
   const soundboardEmbed = new Discord.MessageEmbed()
     .setAuthor("Nekomimi Soundboard")
+    .setDescription("1. daisuki\n 2. nya")
     .setColor("#7EB9FF")
     .setThumbnail(
       client.user.displayAvatarURL({ format: "png", dynamic: true, size: 1024 })
@@ -16,6 +17,7 @@ exports.run = async (client, message, args) => {
   try {
     var soundboardMessage = await message.channel.send(soundboardEmbed);
     await soundboardMessage.react("1️⃣");
+    await soundboardMessage.react("2️⃣");
   } catch (error) {
     console.error(error);
   }
@@ -30,7 +32,7 @@ exports.run = async (client, message, args) => {
 
     switch (reaction.emoji.name) {
       case "1️⃣":
-        reaction.users.remove(user).catch(console.error);
+        reaction.users.remove(user);
         try {
           if (message.member.voice.channel) {
             message.channel
@@ -46,8 +48,7 @@ exports.run = async (client, message, args) => {
                     msg.edit("💙");
                   });
                 });
-              })
-              .catch(console.error);
+              });
           } else {
             return message.channel.send(
               "Onii chan you`re not in a voice channel"
@@ -64,14 +65,14 @@ exports.run = async (client, message, args) => {
 
       case "2️⃣":
         try {
-          reaction.users.remove(user).catch(console.error);
+          reaction.users.remove(user);
           if (message.member.voice.channel) {
             message.member.voice.channel.join().then(connection => {
               const dispatcher = connection.play(
                 "https://cdn.glitch.com/a154c928-09a6-47a7-9ba2-c79cc6bb30d4%2Fnyaa.mp3?v=1580299881684"
               );
               const embed = new Discord.MessageEmbed()
-                .setColor(0x7eb9ff)
+                .setColor("#7EB9FF")
                 .setDescription("You have been blessed");
               message.channel.send(embed);
               dispatcher.on("finish", () => {
@@ -91,13 +92,13 @@ exports.run = async (client, message, args) => {
         break;
 
       default:
-        reaction.users.remove(user).catch(console.error);
+        reaction.users.remove(user);
         break;
     }
   });
 
   collector.on("end", () => {
-    soundboardMessage.reactions.removeAll().catch(console.error);
+    soundboardMessage.reactions.removeAll();
   });
 };
 

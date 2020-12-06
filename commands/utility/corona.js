@@ -8,20 +8,16 @@ const get_virus_statistic = async url =>
 
 const embeded = ({ cases, deaths, recovered }) =>
   new Discord.MessageEmbed()
-    .setThumbnail(
-      "https://cdn.glitch.com/9fe2d21c-0863-4ed3-b866-17b3da405aca%2Fcorona.png?v=1596530227076"
-    )
+    .setThumbnail("https://i.imgur.com/1rh0TWF.png")
     .setColor("#7EB9FF")
     .setTitle("Covid-19 Stats")
-    .addField("**:mask:**   Cases", `${cases.toLocaleString("en")}`,)
-    .addField("**:skull:**   Deaths", `${deaths.toLocaleString("en")}`,)
+    .addField("**:mask:**   Cases", `${cases.toLocaleString("en")}`)
+    .addField("**:skull:**   Deaths", `${deaths.toLocaleString("en")}`)
     .addField(
       "**:white_check_mark:**   Recovered",
-      `${recovered.toLocaleString("en")}`,
+      `${recovered.toLocaleString("en")}`
     )
-    .setFooter(
-      "corona chan"
-    );
+    .setFooter("corona chan");
 
 exports.run = async (client, message, args, level) => {
   const url = `https://corona.lmao.ninja/v2/${
@@ -33,7 +29,7 @@ exports.run = async (client, message, args, level) => {
     })
     .catch(response => {
       console.log(response);
-      message.channel.send("Onii chan corona chan is not available right now");
+      message.channel.send("Onii chan, corona chan is not available right now");
     });
 };
 

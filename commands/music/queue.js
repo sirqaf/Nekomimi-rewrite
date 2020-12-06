@@ -15,10 +15,7 @@ exports.run = async (client, message) => {
   );
 
   let queueEmbed = new Discord.MessageEmbed()
-    .setAuthor(
-      "Queue",
-      "https://cdn.glitch.com/ee8b7266-52ce-4183-a772-33c4a40a6915%2Flo-fi.png?v=1603893809351"
-    )
+    .setAuthor("Queue", "https://i.imgur.com/jlS7KOH.png")
     .setDescription(description)
     .setColor("#7EB9FF");
 

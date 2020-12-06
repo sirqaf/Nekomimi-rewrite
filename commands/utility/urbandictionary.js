@@ -58,6 +58,6 @@ exports.help = {
   name: "urbandictionary",
   category: "Utility",
   description: "Search the urban dictionary",
-  usage: "<prefix>urbandictionary <string>",
+  usage: "<prefix>urbandictionary <text>",
   option: ""
 };

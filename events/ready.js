@@ -5,6 +5,6 @@ module.exports = async (client) => {
   );
   client.user.setActivity("with sirqaf", { type: "PLAYING" });
 
-  let targetChannel = client.channels.cache.get(process.env.MODLOG_CHANNEL_ID);
+  let targetChannel = client.channels.cache.get(client.config.settings.modLogChannelId);
   targetChannel.send("Onii chan im online");
 };

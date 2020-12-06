@@ -27,7 +27,7 @@ exports.run = async (client, message, args) => {
     );
   } else {
     message.channel.send(
-      "Onii chan please define what type of ascii art. Use -help asciiart for more details"
+      `Onii chan please define what type of ascii art. Use ${client.config.settings.prefix}help asciiart for more details`
     );
   }
 };
@@ -36,14 +36,13 @@ exports.conf = {
   enabled: true,
   guildOnly: true,
   aliases: [],
-  permLevel: "User",
+  permLevel: "User"
 };
 
 exports.help = {
   name: "ascii",
   category: "Images",
   description: "Send ascii art",
-  usage:
-    "<prefix>ascii <option>",
+  usage: "<prefix>ascii <option>",
   option: "uwu, komi, ahegao, zerotwo, chika, mai"
 };

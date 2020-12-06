@@ -1,10 +1,10 @@
 const Discord = require("discord.js");
 
 exports.run = async (client, message, args, level) => {
-  
   const friendly = client.config.permLevels.find(l => l.level === level).name;
   const levelEmbed = new Discord.MessageEmbed()
-  .setDescription(`Your permission level is: ${level} - ${friendly}`);
+    .setColor("#7EB9FF")
+    .setDescription(`Your permission level is: ${level} - ${friendly}`);
   message.channel.send(levelEmbed);
 };
 

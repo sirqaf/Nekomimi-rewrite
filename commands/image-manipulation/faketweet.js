@@ -19,21 +19,26 @@ exports.run = async (client, message, args, level) => {
       text
     )}`
   )
-  // API error not func
+    // API error not func
     .then(res => res.json())
     .then(data => message.channel.send({ files: [data.message] }))
     .catch(err => {
       console.log(err);
-      message.channel.stopTyping(true);
-      return message.channel.send("Onii chan there is a problem with the API", message);
+      message.channel.stopTyping();
+      return message.channel.send(
+        "Onii chan there is a problem with the API",
+        message
+      );
     });
-  message.channel.stopTyping(true);
+  message.channel.stopTyping();
+  message.delete();
 };
 
 exports.conf = {
   enabled: true,
   guildOnly: true,
   aliases: [],
+  cooldown: 10,
   permLevel: "User"
 };
 

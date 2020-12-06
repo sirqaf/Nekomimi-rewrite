@@ -2,6 +2,12 @@ const Discord = require("discord.js");
 
 exports.run = async (client, message, args, level) => {
   try {
+    let user =
+      message.mentions.users.first() ||
+      client.users.resolve(args[0]) ||
+      message.author;
+    const member = message.guild.member(user);
+
     const inline = true;
     const resence = true;
     const status = {
@@ -12,43 +18,39 @@ exports.run = async (client, message, args, level) => {
     };
     const friendly = client.config.permLevels.find(l => l.level === level).name;
 
-    const member =
-      message.mentions.members.first() ||
-      message.guild.members.cache.get(args[0]) ||
-      message.member;
-    const target = message.mentions.users.first() || message.author;
+    // const member =
+    //   message.mentions.members.first() ||
+    //   message.guild.members.cache.get(args[0]) ||
+    //   message.member;
+    //const target = message.mentions.users.first() || message.author;
     const embed = new Discord.MessageEmbed()
       .setAuthor("User Information")
       .setThumbnail(
-        target.displayAvatarURL({ format: "png", dynamic: true, size: 1024 })
+        user.displayAvatarURL({ format: "png", dynamic: true, size: 1024 })
       )
       .setColor("#7EB9FF")
       .addField("• Username", `${member.user.tag}`, inline)
-      .addField("• Presence", `${status[member.user.presence.status]}`, true)
-      .addField(
-        "• Status",
-        `${member.user.presence.activities.toString().toLowerCase()}` ||
-          "custom",
-        true
-      )
-      .addField("• ID", `${member.user.id.toLowerCase()}`, true)
-      // .addField(
-      //   "Roles",
-      //   `${
-      //     member.roles.cache
-      //       .filter((r) => r.id !== message.guild.id)
-      //       .map((roles) => `\`${roles.name}\``)
-      //       .join(" **|** ") || "No Roles"
-      //   }`,
-      //   true
-      // )
       .addField(
         "• Permission Level",
         `${level} - ${friendly.toLowerCase()}`,
         true
       )
-      //.setFooter(`Information about ${member.user.username}`)
-      // Embed mobile countermeasures
+      .addField("• Presence", `status[${user.presence.status}]`, true)
+      .addField("• ID", `${user.id}`, true)
+      .addField(
+        "• Roles",
+        `${member.roles.cache
+          .map(roles => `${roles}`)
+          .join(" ")
+          .replace("@everyone", " ")
+          .substr(0, 1024)}`,
+        true
+      )
+      .addField(
+        "• Status",
+        `${user.presence.game ? user.presence.game.name : "None"}`,
+        true
+      )
       .setFooter(
         "\u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b\u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b"
       );

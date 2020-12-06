@@ -4,23 +4,21 @@ exports.run = async (client, message) => {
     return message.channel.send("Onii chan you are not in a voice channel");
   }
   if (!message.guild.me.voice.channel) {
-    return message.channel.send("I am not in a voice channel!");
+    return message.channel.send("Onii chan i am not in a voice channel!");
   }
   const serverQueue = message.client.queue.get(message.guild.id);
   if (serverQueue) {
     serverQueue.connection.dispatcher.destroy();
     channel.leave();
     message.client.queue.delete(message.guild.id);
-    serverQueue.textChannel
-      .send("Onii chan i have left the channel. See you again")
-      .catch(console.error);
+    serverQueue.textChannel.send(
+      "Onii chan i have left the channel. See you again"
+    );
     return;
   }
   channel.leave();
   message.client.queue.delete(message.guild.id);
-  message.channel
-    .send("Onii chan i have left the channel. See you again")
-    .catch(console.error);
+  message.channel.send("Onii chan i have left the channel. See you again");
 };
 
 exports.conf = {

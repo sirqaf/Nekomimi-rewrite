@@ -61,9 +61,9 @@ exports.run = async (client, message, args, level) => {
         .addField(`Time`, `${time}m` || "none", true);
 
         if (!time){
-      message.channel.send(muteEmbed).catch(console.error);
+      message.channel.send(muteEmbed)
         } else {
-      message.channel.send(muteTimerEmbed).catch(console.error);
+      message.channel.send(muteTimerEmbed)
         }
         toMute.roles.add(role.id);
       const unmuteEmbed = new Discord.MessageEmbed()
@@ -75,7 +75,7 @@ exports.run = async (client, message, args, level) => {
         if (time){
       setTimeout(function () {
         toMute.roles.remove(role.id);
-        message.channel.send(unmuteEmbed).catch(console.error);
+        message.channel.send(unmuteEmbed)
       }, ms(ms(time * 60000)));
     }
     } else {

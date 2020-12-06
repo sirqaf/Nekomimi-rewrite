@@ -21,7 +21,7 @@ exports.run = async (client, message, args, level) => {
             `${data[i].short_desc} \n\n` + "Click the **title** for more info."
           )
           .setImage(data[i].img)
-          .setFooter("apex legends","https://cdn.glitch.com/9fe2d21c-0863-4ed3-b866-17b3da405aca%2Fdownload.png?v=1596373010305")
+          .setFooter("apex legends","https://i.imgur.com/MZn5ZXy.png")
 
         message.channel.send(embed);
       }

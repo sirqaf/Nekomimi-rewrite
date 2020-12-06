@@ -15,14 +15,11 @@ exports.run = async (client, message) => {
   queue.loop = !queue.loop;
 
   const loopEmbed = new Discord.MessageEmbed()
-    .setAuthor(
-      "Loop",
-      "https://cdn.glitch.com/ee8b7266-52ce-4183-a772-33c4a40a6915%2Frepeat.png?v=1598773026233"
-    )
+    .setAuthor("Loop", "https://i.imgur.com/hT5tIut.png")
     .setDescription(`set to [ ${queue.loop ? "**on**" : "**off**"} ]`)
     .setColor("#7EB9FF")
     .setFooter(`user: ${message.member.user.username}`);
-  return queue.textChannel.send(loopEmbed).catch(console.error);
+  return queue.textChannel.send(loopEmbed);
 };
 
 exports.conf = {

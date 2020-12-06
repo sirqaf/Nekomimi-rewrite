@@ -21,7 +21,7 @@ exports.run = async (client, message, args) => {
     }
   } else {
     message.channel.send(
-      "Onii chan please input text to convert to speech, see -help texttospeech for details"
+      `Onii chan please input text to convert to speech, see ${client.config.settings.prefix} help texttospeech for details`
     );
   }
   async function tts(textArg) {

@@ -57,7 +57,7 @@ exports.run = async (client, message, args) => {
     }
   } else {
     message.channel.send(
-      `Onii chan are you unsure how to use this command? Use \`${process.env.PREFIX}help 8ball\` to see how.`
+      `Onii chan are you unsure how to use this command? Use \`${client.config.settings.prefix}help 8ball\` to see how.`
     );
   }
 };

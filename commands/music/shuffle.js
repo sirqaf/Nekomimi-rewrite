@@ -21,14 +21,11 @@ exports.run = (client, message) => {
   queue.songs = songs;
   message.client.queue.set(message.guild.id, queue);
   const shuffleEmbed = new Discord.MessageEmbed()
-    .setAuthor(
-      "Shuffle",
-      "https://cdn.glitch.com/ee8b7266-52ce-4183-a772-33c4a40a6915%2Fshuffle.png?v=1598773024469"
-    )
+    .setAuthor("Shuffle", "https://i.imgur.com/yGmONoF.png")
     .setDescription("queue has been shuffled")
     .setColor("#7EB9FF")
     .setFooter(`user: ${message.member.user.username}`);
-  queue.textChannel.send(shuffleEmbed).catch(console.error);
+  queue.textChannel.send(shuffleEmbed);
 };
 
 exports.conf = {

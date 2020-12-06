@@ -3,17 +3,14 @@ const { MessageEmbed } = require("discord.js");
 exports.run = (client, message, args, level) => {
   if (!args[0]) {
     let helpEmbed1 = new MessageEmbed()
-      .setAuthor(
-        "-« Command List »-",
-        "https://cdn.glitch.com/ee8b7266-52ce-4183-a772-33c4a40a6915%2Fcat-help-2.gif?v=1598642077301"
-      )
+      .setAuthor("-« Command List »-", "https://i.imgur.com/AOu20zt.gif")
       .setDescription(
-        `onii chan use ${process.env.PREFIX}help <command> for more details`
+        `onii chan use ${client.config.settings.prefix}help <command> for more details`
       )
       .setColor("#7EB9FF")
-      .addField("• Prefix", `${process.env.PREFIX}`, true)
-      .addField("• Chat Prefix", `${process.env.CHAT_PREFIX}`, true)
-      .addField("• Version", "v0.0.1-beta", true)
+      .addField("• Prefix", `${client.config.settings.prefix}`, true)
+      .addField("• Chat", `<@${client.user.id}>`, true)
+      .addField("• Version", "v0.0.1", true)
       .addField(
         "• Anime",
         "anime **|** animenocontext **|** character **|** saucenao **|** saucemoe **|** waifu2x",
@@ -27,9 +24,15 @@ exports.run = (client, message, args, level) => {
         false
       )
       .addField(
+        "• Images-manipulation",
+        "autocrop **|** blurpify **|** changemymind **|** ddlc **|** deepfry **|** faketweet **|** kannagen **|** magic **|** phcomment **|** " +
+          "rainbow **|** superreso **|** threats",
+        false
+      )
+      .addField(
         "• Music",
-        "play **|** pause **|** skip **|** stop **|** pause **|** resume **|** volume **|** queue **|** clearqueue **|** filter **|** filterstatus **|** " +
-          "shuffle **|** nowplaying **|** loop **|** nya **|** forcestop **|** forceskip **|** lyrics **|** remove **|** leave **|** daisuki",
+        "play **|** playlink **|** playlist **|** pause **|** skip **|** skipto **|** stop **|** pause **|** resume **|** volume **|** queue **|** " +
+          "shuffle **|** nowplaying **|** loop **|** lyrics **|** remove **|** leave **|** move ",
         false
       )
       .addField(
@@ -44,9 +47,9 @@ exports.run = (client, message, args, level) => {
       )
       .addField(
         "• Utility",
-        "github **|** autocrop **|** hexcolor **|** math **|** mylevel **|** passwordstrength **|** ping **|** poll **|** reminder **|** " +
-          "serverinfo **|** stats **|** translate **|** urbandictionary **|** userinfo **|** wikipedia **|** base64 **|** corona **|** emojiimage **|** faketweet **|** " +
-          "magic **|** memegen **|** superreso **|** texttospeech",
+        "github **|** botinfo **|** hexcolor **|** math **|** mylevel **|** passwordstrength **|** ping **|** poll **|** reminder **|** " +
+          "serverinfo **|** stats **|** translate **|** urbandictionary **|** userinfo **|** wikipedia **|** base64 **|** corona **|** emojiimage **|** " +
+          "texttospeech **|** soundboard ",
         false
       )
       .addField(
@@ -56,7 +59,7 @@ exports.run = (client, message, args, level) => {
         false
       );
 
-    message.channel.send(helpEmbed1).catch(console.error);
+    message.channel.send(helpEmbed1);
     message.channel.send(
       "Onii chan this is all my command, please use me properly"
     );
@@ -70,14 +73,20 @@ exports.run = (client, message, args, level) => {
         // as a countermeasure againts discord embed rendered on mobile
         .setAuthor(
           `${command.help.name.toUpperCase()}\u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b\u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b \u200b`,
-          "https://cdn.glitch.com/ee8b7266-52ce-4183-a772-33c4a40a6915%2Fneko-paw.png?v=1598350685447"
+          "https://i.imgur.com/fmPtIuK.png"
         )
         .addField("• Description", `${command.help.description.toLowerCase()}`)
-        .addField("• Usage", `${command.help.usage}`)
-        .addField("• Aliases", `${command.conf.aliases.join(", ")}` || "\u200b")
-        .addField("• Permission", `${command.conf.permLevel.toLowerCase()}`)
-        .addField("• Option", `${command.help.option}` || "\u200b");
-      //.setFooter("nyaa~", "https://cdn.glitch.com/ee8b7266-52ce-4183-a772-33c4a40a6915%2Fneko-paw.png?v=1598350685447");
+        .addField("• Usage", `${command.help.usage}`);
+      if (command.conf.aliases.join(", ")) {
+        helpEmbed2.addField("• Aliases", `${command.conf.aliases.join(", ")}`);
+      }
+      if (command.help.option) {
+        helpEmbed2.addField("• Option", `${command.help.option}`);
+      }
+      helpEmbed2.addField(
+        "• Permission",
+        `${command.conf.permLevel.toLowerCase()}`
+      );
       message.channel.send(helpEmbed2);
     }
   }
