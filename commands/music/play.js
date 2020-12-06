@@ -5,7 +5,7 @@ const youtube = new YouTubeAPI(process.env.YOUTUBE_API_KEY);
 exports.run = async (client, message, args) => {
   if (!args.length) {
     return message.channel.send(
-      `Onii chan you must input song name/url, please refer ${message.settings.prefix}help play for details`
+      `Onii chan you must input song name/url, please refer ${client.config.settings.prefix}help play for details`
     );
   }
   if (message.channel.activeCollector) {
@@ -74,11 +74,8 @@ exports.run = async (client, message, args) => {
       message.client.commands.get("playlink").run(client, message, [track]);
     }
     message.channel.activeCollector = false;
-    resultsMessage.delete().catch(console.error);
-    response
-      .first()
-      .delete()
-      .catch(console.error);
+    resultsMessage.delete();
+    response.first().delete();
   } catch (error) {
     console.error(error);
     resultsMessage.delete();

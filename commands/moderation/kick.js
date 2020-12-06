@@ -30,7 +30,7 @@ exports.run = async (client, message, args, level) => {
     `${member.user.tag} has been kicked by ${message.author.tag} because: ${reason}`
   );
 // log to modlog channel
-let targetChannel = client.channels.cache.get(process.env.MODLOG_CHANNEL_ID);
+let targetChannel = client.channels.cache.get(client.config.settings.modLogChannelId);
 
 if (targetChannel) {
   let kickEmbed = new Discord.MessageEmbed()

@@ -19,13 +19,14 @@ exports.conf = {
   enabled: true,
   guildOnly: true,
   aliases: [],
+  cooldown: 15,
   permLevel: "User",
 };
 
 exports.help = {
   name: "rainbow",
-  category: "Utility",
+  category: "Image-manipulation",
   description: "Convert image into gay picture",
-  usage: "<prefix>rainbow <image>",
+  usage: "<prefix>rainbow <image/mention user>",
   option: "",
 };

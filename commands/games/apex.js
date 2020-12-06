@@ -16,7 +16,7 @@ const getApexData = async (url) =>
     });
 
 exports.run = async (message, args) => {
-  let url = `https://public-api.tracker.gg/v2/apex/standard/profile/origin/${args}`;
+  let url = `https://public-api.tracker.gg/apex/v1/standard/profile/5/${args}`;
   if (!args.length) return;
   await getApexData(url)
     .then((data) => {
@@ -26,7 +26,7 @@ exports.run = async (message, args) => {
       const generalData1 = data.data.segments[1];
       const rank = data.data.segments[0].stats.rankScore;
 
-      //console.log(data);
+      console.log(data);
       if (
         "headshots" in generalData1.stats &&
         generalData0.stats.level.displayValue < 500
@@ -49,7 +49,7 @@ exports.run = async (message, args) => {
           .setImage(`${generalData1.metadata.tallImageUrl}`)
           .setFooter(
             `apex legends`,
-            `https://cdn.glitch.com/9fe2d21c-0863-4ed3-b866-17b3da405aca%2Fdownload.png?v=1596373010305`
+            `https://i.imgur.com/MZn5ZXy.png`
           );
         message.channel.send(embed1);
         return;
@@ -75,7 +75,7 @@ exports.run = async (message, args) => {
           .setImage(`${generalData1.metadata.tallImageUrl}`)
           .setFooter(
             `apex legends`,
-            `https://cdn.glitch.com/9fe2d21c-0863-4ed3-b866-17b3da405aca%2Fdownload.png?v=1596373010305`
+            `https://i.imgur.com/MZn5ZXy.png`
           );
         message.channel.send(embed2);
         return;
@@ -95,7 +95,7 @@ exports.run = async (message, args) => {
           .setImage(`${generalData1.metadata.tallImageUrl}`)
           .setFooter(
             `apex legends`,
-            `https://cdn.glitch.com/9fe2d21c-0863-4ed3-b866-17b3da405aca%2Fdownload.png?v=1596373010305`
+            `https://i.imgur.com/MZn5ZXy.png`
           );
         message.channel.send(embed3);
         return;
@@ -115,7 +115,7 @@ exports.run = async (message, args) => {
           .setImage(`${generalData1.metadata.tallImageUrl}`)
           .setFooter(
             `apex legends`,
-            `https://cdn.glitch.com/9fe2d21c-0863-4ed3-b866-17b3da405aca%2Fdownload.png?v=1596373010305`
+            `https://i.imgur.com/MZn5ZXy.png`
           );
         message.channel.send(embed4);
         return;

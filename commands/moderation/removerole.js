@@ -37,7 +37,7 @@ exports.run = async (client, message, args, level) => {
 
     // log to modlog channel
     let targetChannel = client.channels.cache.get(
-      process.env.MODLOG_CHANNEL_ID
+      client.config.settings.modLogChannelId
     );
 
     if (targetChannel) {

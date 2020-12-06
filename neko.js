@@ -7,8 +7,8 @@ if (Number(process.version.slice(1).split(".")[0]) < 12)
 const Discord = require("discord.js");
 const { promisify } = require("util");
 const readdir = promisify(require("fs").readdir);
-const Enmap = require("enmap");
 const config = require("./configs/config.js");
+const keepAlive = require("./modules/keepAlive.js");
 
 const client = new Discord.Client();
 
@@ -24,7 +24,6 @@ client.starttime = new Date();
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
 client.cooldowns = new Discord.Collection();
-client.settings = new Enmap({ name: "settings" });
 
 // music
 client.queue = new Map();
@@ -35,6 +34,7 @@ const init = async () => {
     "./commands/anime",
     "./commands/fun",
     "./commands/games",
+    "./commands/image-manipulation",
     "./commands/images",
     "./commands/moderation",
     "./commands/music",
@@ -47,7 +47,7 @@ const init = async () => {
     cmdFiles.forEach(f => {
       if (!f.endsWith(".js")) return;
       const response = client.loadCommand(f, dir);
-      //if (response) client.logger.log(response);
+      if (response) client.logger.log(response);
     });
   });
 
@@ -56,7 +56,7 @@ const init = async () => {
   //client.logger.log(`Total Events: ${evtFiles.length}`);
   evtFiles.forEach(file => {
     const eventName = file.split(".")[0];
-    //client.logger.log(`Loading Event: ${eventName}`);
+    client.logger.log(`Loading Event: ${eventName}`);
     const event = require(`./events/${file}`);
     client.on(eventName, event.bind(null, client));
   });
@@ -68,6 +68,7 @@ const init = async () => {
     client.levelCache[thisLevel.name] = thisLevel.level;
   }
 
+  keepAlive();
   // bot login
   client.login(process.env.DISCORD_TOKEN);
 };

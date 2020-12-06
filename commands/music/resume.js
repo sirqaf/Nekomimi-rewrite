@@ -15,10 +15,7 @@ exports.run = async (client, message) => {
   if (!canModifyQueue(message.member)) return;
 
   const resumeEmbed = new Discord.MessageEmbed()
-    .setAuthor(
-      "Resume",
-      "https://cdn.glitch.com/ee8b7266-52ce-4183-a772-33c4a40a6915%2Fplay.png?v=1598773025944"
-    )
+    .setAuthor("Resume", "https://i.imgur.com/m09HHoC.png")
     .setColor("#7EB9FF")
     .setDescription(`${song.title}`)
     .setThumbnail(`https://img.youtube.com/vi/${song.id}/maxresdefault.jpg`)
@@ -27,10 +24,10 @@ exports.run = async (client, message) => {
   if (!queue.playing) {
     queue.playing = true;
     queue.connection.dispatcher.resume();
-    return queue.textChannel.send(resumeEmbed).catch(console.error);
+    return queue.textChannel.send(resumeEmbed);
   }
 
-  return message.reply("Onii chan there is no pause song").catch(console.error);
+  return message.reply("Onii chan there is no pause song");
 };
 
 exports.conf = {

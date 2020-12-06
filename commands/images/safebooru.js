@@ -2,21 +2,28 @@ const Discord = require("discord.js");
 const booru = require("booru");
 
 exports.run = async (client, message, args) => {
-  if (args[0] === undefined) {
+  const site = "safebooru";
+
+  if (args === undefined) {
     message.channel.send(
-      "Onii chan please state what you want to search, use -help safebooru for more details"
+      `Onii chan please state what you want to search, see ${client.config.settings.prefix}help safebooru for more details`
     );
   } else {
     message.channel.startTyping();
-    const query = args[0];
+    const query = args;
     booru
       .search("safebooru", [query], { nsfw: false, limit: 1, random: true })
       .then(images => {
         //console.log(images);
         for (let image of images) {
-          return message.channel.send(`${message.member.user.username} has discovered a new ${args[0]} image from safebooru`,{
-            files: [image.fileUrl]
-          });
+          return message.channel.send(
+            `${message.member.user.username} has discovered a new ${
+              args[0]
+            } image from safebooru`,
+            {
+              files: [image.fileUrl]
+            }
+          );
         }
       })
       .catch(err => {
@@ -29,7 +36,7 @@ exports.run = async (client, message, args) => {
 exports.conf = {
   enabled: true,
   guildOnly: true,
-  aliases: ["sb"],
+  aliases: [],
   permLevel: "User"
 };
 
@@ -38,5 +45,5 @@ exports.help = {
   category: "Images",
   description: "Random image from safebooru",
   usage: "<prefix>safebooru <search term>",
-  option: ""
+  option: "example: asuna_(sao) / rem_(re:zero)"
 };

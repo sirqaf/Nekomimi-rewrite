@@ -35,7 +35,7 @@ exports.run = async (client, message, args, level) => {
   message.channel.send(ban1Embed);
   
   // log to modlog channel
-  let targetChannel = client.channels.cache.get(process.env.MODLOG_CHANNEL_ID);
+  let targetChannel = client.channels.cache.get(client.config.settings.modLogChannelId);
 
   if (targetChannel) {
     let ban2Embed = new Discord.MessageEmbed()

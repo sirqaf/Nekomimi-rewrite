@@ -17,16 +17,13 @@ exports.run = async (client, message) => {
   queue.playing = true;
   queue.connection.dispatcher.end();
   const skipEmbed = new Discord.MessageEmbed()
-    .setAuthor(
-      "Skip",
-      "https://cdn.glitch.com/ee8b7266-52ce-4183-a772-33c4a40a6915%2Fnext.png?v=1598773026526"
-    )
+    .setAuthor("Skip", "https://i.imgur.com/dqPRC1O.png")
     .setColor("#7EB9FF")
     .setDescription(`${song.title}`)
     .setThumbnail(`https://img.youtube.com/vi/${song.id}/maxresdefault.jpg`)
     .setFooter(`user: ${message.member.user.username}`);
 
-  queue.textChannel.send(skipEmbed).catch(console.error);
+  queue.textChannel.send(skipEmbed);
 };
 
 exports.conf = {
@@ -39,7 +36,7 @@ exports.conf = {
 exports.help = {
   name: "skip",
   category: "Music",
-  description: "Skip now playing song by minimum vote of 2 user",
+  description: "Skip current playing song",
   usage: "<prefix>skip",
   option: ""
 };

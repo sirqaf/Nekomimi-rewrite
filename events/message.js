@@ -2,11 +2,10 @@ const Discord = require("discord.js");
 
 module.exports = async (client, message) => {
   if (message.author.bot) return;
-  const settings = (message.settings = client.getSettings(message.guild));
 
-  if (message.content.indexOf(settings.prefix) !== 0) return;
+  if (message.content.indexOf(client.config.settings.prefix) !== 0) return;
   const args = message.content
-    .slice(settings.prefix.length)
+    .slice(client.config.settings.prefix.length)
     .trim()
     .split(/ +/g);
   const command = args.shift().toLowerCase();
@@ -47,7 +46,7 @@ module.exports = async (client, message) => {
 
   // permission notice
   if (level < client.levelCache[cmd.conf.permLevel]) {
-    if (settings.systemNotice === "true") {
+    if (client.config.settings.systemNotice === "true") {
       return message.channel
         .send(`Onii chan you do not have permission to use this command.
     Your permission level is ${level} (${

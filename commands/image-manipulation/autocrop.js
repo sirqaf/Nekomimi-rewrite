@@ -32,5 +32,5 @@ exports.help = {
   name: "autocrop",
   category: "Utility",
   description: "autocrop images (remove border/frame)",
-  usage: "<prefix>autocrop <attachment/image>"
+  usage: "<prefix>autocrop <image>"
 };

@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 exports.run = async (client, message, args, level) => {
   try {
     if (!args.join(" "))
-      return message.reply("Onii chan you need to give me a sentence");
+      return message.reply(`Onii chan you need to give me a text, see ${client.config.settings.prefix}help poll for details`);
 
     let pollEmbed = new Discord.MessageEmbed()
       .setTitle(args.join(" "))

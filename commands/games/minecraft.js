@@ -9,13 +9,11 @@ exports.run = async (client, message, args, level) => {
       const data = res.data;
       const plugins = data.plugins ? data.plugins.names : [];
       const mods = data.mods ? data.mods.names : [];
-      if (data.players.list != undefined) {
+      if (data.online != undefined) {
         let playerCount = res.data.players.online || 0; // Default to zero
         const embed = new Discord.MessageEmbed()
           .setColor("#7EB9FF")
-          .setThumbnail(
-            `https://cdn.glitch.com/a154c928-09a6-47a7-9ba2-c79cc6bb30d4%2FPicture1.png?v=1592938523080`
-          )
+          .setThumbnail("https://i.imgur.com/TSIx9cT.png")
           .setAuthor(
             `${process.env.MC_SERVER_HOST}` //`https://api.mcsrvstat.us/icon/iseikai.aternos.me`
           )
@@ -54,13 +52,18 @@ exports.run = async (client, message, args, level) => {
         "Server shut down at 4.00am everyday to avoid being ban"
       );
       message.channel.send("Please turn it back on https://aternos.org");
-    Puppeteer.start_server();
+      //Puppeteer.start_server();
       console.log(
         "Could not load player count data for",
         process.env.MC_SERVER_HOST
       );
     })
-    .catch(err => console.log("Onii chan there is an error pinging api.mcsrvstat.us for data:", err));
+    .catch(err =>
+      console.log(
+        "Onii chan there is an error pinging api.mcsrvstat.us for data:",
+        err
+      )
+    );
 };
 exports.conf = {
   enabled: true,

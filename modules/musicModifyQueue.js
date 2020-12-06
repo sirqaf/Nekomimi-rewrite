@@ -4,7 +4,7 @@ module.exports = {
     const botChannel = member.guild.me.voice.channel;
 
     if (channel !== botChannel) {
-      member.send("Onii chan you need to join the voice channel").catch(console.error);
+      member.send("Onii chan you need to join the voice channel");
       return false;
     }
 

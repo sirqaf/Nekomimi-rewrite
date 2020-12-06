@@ -13,12 +13,9 @@ exports.run = async (client, message) => {
 
   const song = queue.songs[0];
   if (!canModifyQueue(message.member)) return;
-  
+
   const pauseEmbed = new Discord.MessageEmbed()
-    .setAuthor(
-      "Pause",
-      "https://cdn.glitch.com/ee8b7266-52ce-4183-a772-33c4a40a6915%2Fpause.png?v=1598773026714"
-    )
+    .setAuthor("Pause", "https://i.imgur.com/IWXMVFi.png")
     .setColor("#7EB9FF")
     .setDescription(`${song.title}`)
     .setThumbnail(`https://img.youtube.com/vi/${song.id}/maxresdefault.jpg`)
@@ -27,7 +24,7 @@ exports.run = async (client, message) => {
   if (queue.playing) {
     queue.playing = false;
     queue.connection.dispatcher.pause(true);
-    return queue.textChannel.send(pauseEmbed).catch(console.error);
+    return queue.textChannel.send(pauseEmbed);
   }
 };
 

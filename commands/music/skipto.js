@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const { canModifyQueue } = require("../../modules/musicModifyQueue");
 
-exports.run = async (client, message, args) => {
+exports.run = (client, message, args) => {
   const voice = message.member.voice.channel;
   if (!voice) {
     return message.channel.send("Onii chan you are not in a voice channel");
@@ -13,7 +13,7 @@ exports.run = async (client, message, args) => {
 
   if (!args.length || isNaN(args[0])) {
     return message.channel.send(
-      `Onii chan you did not type the number of song to be play, please refer ${process.env.PREFIX}help skipto for details`
+      `Onii chan you did not type the number of song to be play, please refer ${client.config.settings.prefix}help skipto for details`
     );
   }
 
@@ -21,9 +21,9 @@ exports.run = async (client, message, args) => {
   if (!canModifyQueue(message.member)) return;
 
   if (args[0] > queue.songs.length)
-    return message
-      .reply(`Onii chan the queue only have ${queue.songs.length} songs`)
-      .catch(console.error);
+    return message.channel.send(
+      `Onii chan the queue only have ${queue.songs.length} songs`
+    );
 
   queue.playing = true;
   if (queue.loop) {
@@ -35,29 +35,27 @@ exports.run = async (client, message, args) => {
   }
   queue.connection.dispatcher.end();
   const skiptoEmbed = new Discord.MessageEmbed()
-    .setAuthor(
-      "Skip",
-      "https://cdn.glitch.com/ee8b7266-52ce-4183-a772-33c4a40a6915%2Fnext.png?v=1598773026526"
-    )
+    .setAuthor("Skip", "https://i.imgur.com/dqPRC1O.png")
     .setColor("#7EB9FF")
     .setDescription(`${song.title}`)
     .setThumbnail(`https://img.youtube.com/vi/${song.id}/maxresdefault.jpg`)
     .setFooter(`user: ${message.member.user.username}`);
 
-  queue.textChannel.send(skiptoEmbed).catch(console.error);
+  queue.textChannel.send(skiptoEmbed);
 };
 
 exports.conf = {
   enabled: true,
   guildOnly: true,
   aliases: [],
+  cooldown: 5,
   permLevel: "User"
 };
 
 exports.help = {
   name: "skipto",
   category: "Music",
-  description: "Skip now playing song by minimum vote of 2 user",
-  usage: "<prefix>skip",
+  description: "Skip current playing song",
+  usage: "<prefix>skipto",
   option: ""
 };
