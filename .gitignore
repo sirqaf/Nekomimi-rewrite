@@ -109,3 +109,5 @@ note.txt
 package-lock.json
 #data/
 watch.json
+shrinkwrap.yaml
+.glitch-assets

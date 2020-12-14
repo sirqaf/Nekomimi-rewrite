@@ -11,18 +11,12 @@ exports.run = async (client, message, args, level) => {
     const inline = true;
     const resence = true;
     const status = {
-      online: "online",
-      idle: "idle",
-      dnd: "do Not Disturb",
-      offline: "offline/invisible"
+      online: "🟢 online",
+      idle: "🟡 idle",
+      dnd: "🔴 do Not Disturb",
+      offline: "⚪ offline/invisible"
     };
     const friendly = client.config.permLevels.find(l => l.level === level).name;
-
-    // const member =
-    //   message.mentions.members.first() ||
-    //   message.guild.members.cache.get(args[0]) ||
-    //   message.member;
-    //const target = message.mentions.users.first() || message.author;
     const embed = new Discord.MessageEmbed()
       .setAuthor("User Information")
       .setThumbnail(
@@ -35,7 +29,7 @@ exports.run = async (client, message, args, level) => {
         `${level} - ${friendly.toLowerCase()}`,
         true
       )
-      .addField("• Presence", `status[${user.presence.status}]`, true)
+      .addField("• Presence", `${status[user.presence.status]}`, true)
       .addField("• ID", `${user.id}`, true)
       .addField(
         "• Roles",
@@ -48,7 +42,7 @@ exports.run = async (client, message, args, level) => {
       )
       .addField(
         "• Status",
-        `${user.presence.game ? user.presence.game.name : "None"}`,
+        `${user.presence.game ? user.presence.game.name : "none"}`,
         true
       )
       .setFooter(

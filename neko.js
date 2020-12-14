@@ -10,7 +10,9 @@ const readdir = promisify(require("fs").readdir);
 const config = require("./configs/config.js");
 const keepAlive = require("./modules/keepAlive.js");
 
-const client = new Discord.Client();
+const client = new Discord.Client({
+  ws: { intents: new Discord.Intents(Discord.Intents.ALL) }
+});
 
 // import files
 client.config = config;

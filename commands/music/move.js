@@ -41,7 +41,7 @@ exports.conf = {
 exports.help = {
   name: "move",
   category: "Music",
-  description: "Move songs position in queue",
+  description: "Move current songs into other position in queue",
   usage: "<prefix>move <queue number>",
   option: ""
 };
