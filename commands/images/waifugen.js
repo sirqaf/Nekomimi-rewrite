@@ -1,12 +1,12 @@
 const waifulabs = require("waifulabs");
 
-exports.run = async (client, message, args) => {
-  const waifus = await waifulabs.generateWaifus();
-  console.log(waifus);
-  waifugen(waifus);
+exports.run = (client, message, args) => {
+  //console.log(waifus);
+  waifugen();
 
-  function waifugen(waifus) {
+  async function waifugen() {
     message.channel.startTyping();
+    const waifus = await waifulabs.generateWaifus();
     const waifu = waifus[0];
     const imageData = waifu.image;
     const imageSeeds = waifu.seeds;

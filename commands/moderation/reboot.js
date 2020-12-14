@@ -1,7 +1,7 @@
-// Does not rebooting server, only bot
+// does not rebooting server, only bot
 exports.run = async (client, message, args, level) => {
   await message.channel.send(
-    "Onii chan im restarting..\n(approximately 15 seconds)"
+    "Onii chan im restarting..\n(approximately 10-15 seconds)"
   );
   await Promise.all(client.commands.map((cmd) => client.unloadCommand(cmd)));
   process.exit(0);

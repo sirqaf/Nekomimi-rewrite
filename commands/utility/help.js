@@ -24,7 +24,7 @@ exports.run = (client, message, args, level) => {
         false
       )
       .addField(
-        "• Images-manipulation",
+        "• Images-Manipulation",
         "autocrop **|** blurpify **|** changemymind **|** ddlc **|** deepfry **|** faketweet **|** kannagen **|** magic **|** phcomment **|** " +
           "rainbow **|** superreso **|** threats",
         false

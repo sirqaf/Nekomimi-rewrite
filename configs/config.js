@@ -14,7 +14,7 @@ const config = {
 
   // default bot settings
   settings: {
-    prefix: "/",
+    prefix: "-",
     modLogChannelId: "662911415451123712",
     modRole: "Moderator",
     adminRole: "Administrator",

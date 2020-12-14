@@ -1,13 +1,14 @@
 module.exports = {
   canModifyQueue(member) {
-    const { channel } = member.voice;
-    const botChannel = member.guild.me.voice.channel;
+    const { channelID } = member.voice;
+    const botChannel = member.guild.voice.channelID;
 
-    if (channel !== botChannel) {
-      member.send("Onii chan you need to join the voice channel");
-      return false;
+    if (channelID !== botChannel) {
+      member
+        .send("Onii chan you need to join the voice channel")
+        .catch(console.error);
+      return;
     }
-
     return true;
   }
 };
