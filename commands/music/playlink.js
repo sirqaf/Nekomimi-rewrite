@@ -1,7 +1,8 @@
 const { musicPlayer } = require("../../modules/musicPlayer");
 const { SOUNDCLOUD_CLIENT_ID } = process.env.SOUNDCLOUD_CLIENT_ID;
 const ytdl = require("ytdl-core");
-const youtube = require("youtube-sr");
+const YouTubeAPI = require("simple-youtube-api");
+const youtube = new YouTubeAPI(process.env.YOUTUBE_API_KEY);
 const scdl = require("soundcloud-downloader").default;
 const https = require("https");
 
@@ -42,6 +43,7 @@ exports.run = async (client, message, args) => {
   if (!videoPattern.test(args[0]) && playlistPattern.test(args[0])) {
     return message.client.commands.get("playlist").run(client, message, args);
   } else if (url.includes("/sets/")) {
+    //scdl.isValidUrl(url) &&
     return message.client.commands.get("playlist").run(client, message, args);
   }
 
@@ -64,6 +66,8 @@ exports.run = async (client, message, args) => {
       return message.channel.send(
         "Onii chan there was an error playing that Soundcloud track"
       );
+
+      return message.channel.send("Following url redirection..");
     }
   }
 
@@ -92,7 +96,7 @@ exports.run = async (client, message, args) => {
       };
     } catch (err) {
       console.log(err);
-      return message.channel.send("Onii chan there was an error occurred");
+      return message.channel.send("Onii chan there is an error occurred");
     }
   } else if (scRegex.test(url)) {
     try {
@@ -114,7 +118,7 @@ exports.run = async (client, message, args) => {
     }
   } else {
     try {
-      const results = await youtube.search(search, { limit: 1 });
+      const results = await youtube.searchVideos(search, 1);
       songInfo = await ytdl.getInfo(results[0].url);
       song = {
         title: songInfo.videoDetails.title,

@@ -1,17 +1,19 @@
 const Discord = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const { musicPlayer } = require("../../modules/musicPlayer");
+const { YOUTUBE_API_KEY } = process.env.YOUTUBE_API_KEY;
 const { SOUNDCLOUD_CLIENT_ID } = process.env.SOUNDCLOUD_CLIENT_ID;
 const YouTubeAPI = require("simple-youtube-api");
 const youtube = new YouTubeAPI(process.env.YOUTUBE_API_KEY);
 const scdl = require("soundcloud-downloader").default;
-const MAX_PLAYLIST_SIZE = 60;
+const MAX_PLAYLIST_SIZE = 20;
 
 exports.run = async (client, message, args) => {
   const { channel } = message.member.voice;
 
   if (!args.length) {
     return message.channel.send(
-      `Onii chan you must input song name/url, please refer ${client.config.settings.prefix}help playlist for more details`
+      `Onii chan you must input song name/url, please refer ${client.config.settings.prefix}help for guide`
     );
   }
   const voice = message.member.voice.channel;
@@ -98,7 +100,7 @@ exports.run = async (client, message, args) => {
 
   const songs = serverQueue ? serverQueue.songs : queueConstruct.songs;
 
-  let playlistEmbed = new Discord.MessageEmbed()
+  let playlistEmbed = new MessageEmbed()
     .setTitle(`${playlist.title}`)
     .setDescription(songs.map((song, index) => `${index + 1}. ${song.title}`))
     .setURL(playlist.url)
