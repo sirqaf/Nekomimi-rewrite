@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 if (Number(process.version.slice(1).split(".")[0]) < 12)
   throw new Error(
     "Node 12.0.0 or higher is required. Update Node on your system."
@@ -8,7 +10,6 @@ const Discord = require("discord.js");
 const { promisify } = require("util");
 const readdir = promisify(require("fs").readdir);
 const config = require("./configs/config.js");
-const keepAlive = require("./modules/keepAlive.js");
 
 const client = new Discord.Client({
   ws: { intents: new Discord.Intents(Discord.Intents.ALL) }
@@ -70,7 +71,6 @@ const init = async () => {
     client.levelCache[thisLevel.name] = thisLevel.level;
   }
 
-  keepAlive();
   // bot login
   client.login(process.env.DISCORD_TOKEN);
 };
