@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
 
 exports.run = async (client, message) => {
-
+  message.channel.startTyping();
   const member = message.mentions.users.first();
 
   fetch("https://nekos.life/api/v2/img/tickle")
@@ -12,27 +12,34 @@ exports.run = async (client, message) => {
     })
     .then((data) => {
       const image = data.url;
-if (member){
-  message.channel.send(`${message.member.user.username} is tickling ${member.username}`, {
-    files: [image],
-  });
-} else {
-      message.channel.send(`${message.member.user.username} is tickling someone`, {
-        files: [image],
-      });
-    }
+      if (member) {
+        message.channel.send(
+          `${message.member.user.username} is tickling ${member.username}`,
+          {
+            files: [image],
+          }
+        );
+      } else {
+        message.channel.send(
+          `${message.member.user.username} is tickling someone`,
+          {
+            files: [image],
+          }
+        );
+      }
       console.log(data);
     })
     .catch((err) => {
       console.log(err);
     });
+  message.channel.stopTyping();
 };
 
 exports.conf = {
   enabled: true,
   guildOnly: true,
   aliases: [],
-  permLevel: "User"
+  permLevel: "User",
 };
 
 exports.help = {
@@ -40,5 +47,5 @@ exports.help = {
   category: "Images",
   description: "Random anime tickling gif",
   usage: "<prefix>tickle <mention/optional>",
-  option: ""
+  option: "",
 };

@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
 
 exports.run = async (client, message) => {
-
+  message.channel.startTyping();
   const member = message.mentions.users.first();
 
   fetch("https://waifu.pics/api/sfw/bully")
@@ -12,27 +12,34 @@ exports.run = async (client, message) => {
     })
     .then((data) => {
       const image = data.url;
-if (member){
-  message.channel.send(`${message.member.user.username} is bullying ${member.username}, smh`, {
-    files: [image],
-  });
-} else {
-      message.channel.send(`${message.member.user.username} is bullying someone, smh`, {
-        files: [image],
-      });
-    }
+      if (member) {
+        message.channel.send(
+          `${message.member.user.username} is bullying ${member.username}, smh`,
+          {
+            files: [image],
+          }
+        );
+      } else {
+        message.channel.send(
+          `${message.member.user.username} is bullying someone, smh`,
+          {
+            files: [image],
+          }
+        );
+      }
       console.log(data);
     })
     .catch((err) => {
       console.log(err);
     });
+  message.channel.stopTyping();
 };
 
 exports.conf = {
   enabled: true,
   guildOnly: true,
   aliases: [],
-  permLevel: "User"
+  permLevel: "User",
 };
 
 exports.help = {
@@ -40,5 +47,5 @@ exports.help = {
   category: "Images",
   description: "Random anime bullying gif",
   usage: "<prefix>pat <mention/optional>",
-  option: ""
+  option: "",
 };

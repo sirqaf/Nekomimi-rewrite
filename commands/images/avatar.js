@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
 
 exports.run = async (client, message) => {
-
+  message.channel.startTyping();
   var url = [
     "https://nekos.life/api/v2/img/avatar",
     "https://nekos.life/api/v2/img/waifu",
@@ -28,6 +28,7 @@ exports.run = async (client, message) => {
     .catch((err) => {
       console.log(err);
     });
+  message.channel.stopTyping();
 };
 
 exports.conf = {

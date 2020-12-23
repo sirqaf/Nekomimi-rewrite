@@ -13,20 +13,18 @@ exports.run = async (client, message, args) => {
     const query = args;
     booru
       .search("safebooru", [query], { nsfw: false, limit: 1, random: true })
-      .then(images => {
+      .then((images) => {
         //console.log(images);
         for (let image of images) {
           return message.channel.send(
-            `${message.member.user.username} has discovered a new ${
-              args[0]
-            } image from safebooru`,
+            `${message.member.user.username} has discovered a new ${args[0]} image from safebooru`,
             {
-              files: [image.fileUrl]
+              files: [image.fileUrl],
             }
           );
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
     message.channel.stopTyping();
@@ -37,7 +35,7 @@ exports.conf = {
   enabled: true,
   guildOnly: true,
   aliases: [],
-  permLevel: "User"
+  permLevel: "User",
 };
 
 exports.help = {
@@ -45,5 +43,5 @@ exports.help = {
   category: "Images",
   description: "Random image from safebooru",
   usage: "<prefix>safebooru <search term>",
-  option: "example: asuna_(sao) / rem_(re:zero)"
+  option: "example: asuna_(sao) / rem_(re:zero)",
 };

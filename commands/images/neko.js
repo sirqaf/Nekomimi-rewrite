@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
 
 exports.run = async (client, message) => {
-
+  message.channel.startTyping();
   var url = [
     "https://waifu.pics/api/sfw/neko",
     "https://nekos.life/api/v2/img/neko",
@@ -17,21 +17,25 @@ exports.run = async (client, message) => {
     .then((data) => {
       const image = data.url;
 
-      message.channel.send(`${message.member.user.username} has discovered a new neko nyaa~`, {
-        files: [image],
-      });
+      message.channel.send(
+        `${message.member.user.username} has discovered a new neko nyaa~`,
+        {
+          files: [image],
+        }
+      );
       console.log(data);
     })
     .catch((err) => {
       console.log(err);
     });
+  message.channel.stopTyping();
 };
 
 exports.conf = {
   enabled: true,
   guildOnly: true,
   aliases: [],
-  permLevel: "User"
+  permLevel: "User",
 };
 
 exports.help = {
@@ -39,5 +43,5 @@ exports.help = {
   category: "Images",
   description: "Random Neko pic",
   usage: "<prefix>neko",
-  option: ""
+  option: "",
 };

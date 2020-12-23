@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
 
 exports.run = async (client, message) => {
-
+  message.channel.startTyping();
   fetch("https://waifu.pics/api/sfw/nom")
     .then((response) => {
       if (!response.ok)
@@ -19,6 +19,7 @@ exports.run = async (client, message) => {
     .catch((err) => {
       console.log(err);
     });
+  message.channel.stopTyping();
 };
 
 exports.conf = {

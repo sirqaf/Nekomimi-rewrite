@@ -1,6 +1,7 @@
 const fetch = require("node-fetch");
 
 exports.run = async (client, message) => {
+  message.channel.startTyping();
   fetch("https://nekos.life/api/v2/img/wallpaper")
     .then((response) => {
       if (!response.ok)
@@ -21,6 +22,7 @@ exports.run = async (client, message) => {
     .catch((err) => {
       console.log(err);
     });
+  message.channel.stopTyping();
 };
 
 exports.conf = {

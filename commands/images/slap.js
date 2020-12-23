@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
 
 exports.run = async (client, message) => {
-
+  message.channel.startTyping();
   var url = [
     "https://waifu.pics/api/sfw/slap",
     "https://nekos.life/api/v2/img/slap",
@@ -17,27 +17,34 @@ exports.run = async (client, message) => {
     })
     .then((data) => {
       const image = data.url;
-if (member){
-  message.channel.send(`${message.member.user.username} is slapping ${member.username}, so outrageous`, {
-    files: [image],
-  });
-} else {
-      message.channel.send(`${message.member.user.username} is slapping someone, so outrageous`, {
-        files: [image],
-      });
-    }
+      if (member) {
+        message.channel.send(
+          `${message.member.user.username} is slapping ${member.username}, so outrageous`,
+          {
+            files: [image],
+          }
+        );
+      } else {
+        message.channel.send(
+          `${message.member.user.username} is slapping someone, so outrageous`,
+          {
+            files: [image],
+          }
+        );
+      }
       console.log(data);
     })
     .catch((err) => {
       console.log(err);
     });
+  message.channel.stopTyping();
 };
 
 exports.conf = {
   enabled: true,
   guildOnly: true,
   aliases: [],
-  permLevel: "User"
+  permLevel: "User",
 };
 
 exports.help = {
@@ -45,5 +52,5 @@ exports.help = {
   category: "Images",
   description: "Random anime slapping gif",
   usage: "<prefix>slap <mention/optional>",
-  option: ""
+  option: "",
 };

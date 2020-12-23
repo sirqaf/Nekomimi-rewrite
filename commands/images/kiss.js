@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
 
 exports.run = async (client, message) => {
-
+  message.channel.startTyping();
   var url = [
     "https://waifu.pics/api/sfw/kiss",
     "https://nekos.life/api/v2/img/kiss",
@@ -17,28 +17,34 @@ exports.run = async (client, message) => {
     })
     .then((data) => {
       const image = data.url;
-if (member){
-  message.channel.send(`${message.member.user.username} is kissing ${member.username}, smooch~`, {
-    files: [image],
-  });
-} else {
-      message.channel.send(`${message.member.user.username} is kissing someone, smooch~`, {
-        files: [image],
-      });
-    }
+      if (member) {
+        message.channel.send(
+          `${message.member.user.username} is kissing ${member.username}, smooch~`,
+          {
+            files: [image],
+          }
+        );
+      } else {
+        message.channel.send(
+          `${message.member.user.username} is kissing someone, smooch~`,
+          {
+            files: [image],
+          }
+        );
+      }
       console.log(data);
     })
     .catch((err) => {
       console.log(err);
     });
+  message.channel.stopTyping();
 };
-
 
 exports.conf = {
   enabled: true,
   guildOnly: true,
   aliases: [],
-  permLevel: "User"
+  permLevel: "User",
 };
 
 exports.help = {
@@ -46,5 +52,5 @@ exports.help = {
   category: "Images",
   description: "Random anime kissing gif",
   usage: "<prefix>kiss <mention/optional>",
-  option: ""
+  option: "",
 };

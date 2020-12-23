@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
 
 exports.run = async (client, message) => {
-
+  message.channel.startTyping();
   var url = [
     "https://waifu.pics/api/sfw/hug",
     "https://nekos.life/api/v2/img/hug",
@@ -18,27 +18,34 @@ exports.run = async (client, message) => {
     })
     .then((data) => {
       const image = data.url;
-if (member){
-  message.channel.send(`${message.member.user.username} is hugging ${member.username}`, {
-    files: [image],
-  });
-} else {
-      message.channel.send(`${message.member.user.username} is hugging someone`, {
-        files: [image],
-      });
-    }
+      if (member) {
+        message.channel.send(
+          `${message.member.user.username} is hugging ${member.username}`,
+          {
+            files: [image],
+          }
+        );
+      } else {
+        message.channel.send(
+          `${message.member.user.username} is hugging someone`,
+          {
+            files: [image],
+          }
+        );
+      }
       console.log(data);
     })
     .catch((err) => {
       console.log(err);
     });
+  message.channel.stopTyping();
 };
 
 exports.conf = {
   enabled: true,
   guildOnly: true,
   aliases: [],
-  permLevel: "User"
+  permLevel: "User",
 };
 
 exports.help = {
@@ -46,5 +53,5 @@ exports.help = {
   category: "Images",
   description: "Random anime hugging gif",
   usage: "<prefix>hug <mention/optional>",
-  option: ""
+  option: "",
 };
