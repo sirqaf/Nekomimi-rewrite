@@ -27,7 +27,7 @@ exports.run = async (client, message) => {
     return queue.textChannel.send(resumeEmbed);
   }
 
-  return message.reply("Onii chan there is no pause song");
+  return message.channel.send("Onii chan there is no pause song");
 };
 
 exports.conf = {
